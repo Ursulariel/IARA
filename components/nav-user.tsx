@@ -19,6 +19,7 @@ import {
 import { BellIcon } from "@solar-icons/react/outline/bell"
 import { CardIcon } from "@solar-icons/react/outline/card"
 import { LogoutIcon } from "@solar-icons/react/outline/logout"
+import { SettingsIcon } from "@solar-icons/react/outline/settings"
 import { UserCircleIcon } from "@solar-icons/react/outline/user-circle"
 
 export function NavUser({
@@ -77,6 +78,10 @@ export function NavUser({
               <DropdownMenuItem>
                 <UserCircleIcon />
                 Conta
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <SettingsIcon />
+                Configurações
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CardIcon />

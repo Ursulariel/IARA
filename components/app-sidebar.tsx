@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import Image from "next/image"
 import Link from "next/link"
 
 import { primaryNavigationItems } from "@/components/navigation-items"
@@ -16,9 +17,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { MagicWand3Icon } from "@solar-icons/react/outline/magic-wand-3"
 import { QuestionCircleIcon } from "@solar-icons/react/outline/question-circle"
-import { SettingsIcon } from "@solar-icons/react/outline/settings"
 
 const account = {
   name: "shadcn",
@@ -26,11 +25,6 @@ const account = {
 }
 
 const secondaryNavigationItems = [
-  {
-    title: "Configurações",
-    url: "#",
-    icon: <SettingsIcon />,
-  },
   {
     title: "Ajuda",
     url: "#",
@@ -45,10 +39,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               aria-label="IARA"
-              className="flex h-10 items-center justify-center rounded-lg p-0!"
+              className="flex h-10 items-center justify-center rounded-lg p-0! hover:bg-transparent"
               render={<Link href="/inicio" />}
             >
-              <MagicWand3Icon className="size-6! text-orange-800" />
+              <Image
+                src="/iara-icon.svg"
+                alt=""
+                width={80}
+                height={140}
+                className="h-8 w-auto"
+              />
               <span className="sr-only">IARA</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
