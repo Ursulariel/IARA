@@ -32,6 +32,13 @@ import {
 } from "@/components/home-material-illustrations"
 import { ClassroomIllustration } from "@/components/classroom-illustration"
 import { ModelExplorer } from "@/components/model-explorer"
+import {
+  DebatePlanIllustration,
+  FractionsPlanIllustration,
+  GeometryPlanIllustration,
+  ReadingPlanIllustration,
+  WritingPlanIllustration,
+} from "@/components/plan-illustrations"
 import { useHorizontalCarousel } from "@/hooks/use-horizontal-carousel"
 
 type Action = {
@@ -54,6 +61,15 @@ type Classroom = {
   background: string
   accent: string
   softAccent: string
+}
+
+type PlanningMock = {
+  title: string
+  subject: string
+  classroom: string
+  updatedAt: string
+  Illustration: ComponentType<{ className?: string }>
+  background: string
 }
 
 const actions: Action[] = [
@@ -160,6 +176,49 @@ const classrooms: Classroom[] = [
   },
 ]
 
+const planningMocks: PlanningMock[] = [
+  {
+    title: "Leitura compartilhada: fábulas",
+    subject: "Língua Portuguesa",
+    classroom: "2º ano B",
+    updatedAt: "Atualizado hoje",
+    Illustration: ReadingPlanIllustration,
+    background: "#E5F0FF",
+  },
+  {
+    title: "Frações no cotidiano",
+    subject: "Matemática",
+    classroom: "5º ano A",
+    updatedAt: "Atualizado ontem",
+    Illustration: FractionsPlanIllustration,
+    background: "#DCFCE7",
+  },
+  {
+    title: "Oficina de carta de opinião",
+    subject: "Produção textual",
+    classroom: "9º ano C",
+    updatedAt: "Atualizado há 2 dias",
+    Illustration: WritingPlanIllustration,
+    background: "#FEF3C7",
+  },
+  {
+    title: "Formas geométricas na escola",
+    subject: "Matemática",
+    classroom: "5º ano C",
+    updatedAt: "Atualizado há 4 dias",
+    Illustration: GeometryPlanIllustration,
+    background: "#DCF4DF",
+  },
+  {
+    title: "Roda de conversa literária",
+    subject: "Língua Portuguesa",
+    classroom: "2º ano D",
+    updatedAt: "Atualizado na semana passada",
+    Illustration: DebatePlanIllustration,
+    background: "#F1E5FB",
+  },
+]
+
 export function CreationActions() {
   const [view, setView] = useState<View>("inicio")
   const {
@@ -167,7 +226,6 @@ export function CreationActions() {
     canScrollPrevious,
     canScrollNext,
     scroll: scrollActions,
-    maskImage: carouselMaskImage,
   } = useHorizontalCarousel(actions.length, {
     enabled: view === "inicio",
     minimumScrollDistance: 160,
@@ -271,14 +329,6 @@ export function CreationActions() {
                     ref={actionsRef}
                     id="creation-actions-carousel"
                     className="mx-auto no-scrollbar flex w-full max-w-2xl min-w-0 snap-x snap-mandatory scroll-px-10 gap-5 overflow-x-auto scroll-smooth px-10 py-1 sm:mx-0 sm:scroll-px-1 sm:gap-7 sm:px-1"
-                    style={
-                      carouselMaskImage
-                        ? {
-                            maskImage: carouselMaskImage,
-                            WebkitMaskImage: carouselMaskImage,
-                          }
-                        : undefined
-                    }
                   >
                     {actions.map((action) => (
                       <ActionIcon key={action.title} action={action} />
@@ -315,6 +365,7 @@ export function CreationActions() {
         <>
           <MaterialMocks />
           <Classrooms />
+          <PlanningMocks />
         </>
       )}
     </>
@@ -322,13 +373,9 @@ export function CreationActions() {
 }
 
 function MaterialMocks() {
-  const {
-    trackRef,
-    canScrollPrevious,
-    canScrollNext,
-    scroll,
-    maskImage: carouselMaskImage,
-  } = useHorizontalCarousel(materialMocks.length)
+  const [showAll, setShowAll] = useState(false)
+  const { trackRef, canScrollPrevious, canScrollNext, scroll } =
+    useHorizontalCarousel(materialMocks.length, { enabled: !showAll })
 
   return (
     <section
@@ -336,70 +383,109 @@ function MaterialMocks() {
       aria-labelledby="historico-de-interacoes"
     >
       <div className="mx-auto max-w-6xl">
-        <h2
-          id="historico-de-interacoes"
-          className="pb-4 font-heading text-xl font-semibold tracking-tight text-foreground sm:text-2xl"
-        >
-          Histórico de interações
-        </h2>
-        <div className="relative isolate">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-4">
+          <h2
+            id="historico-de-interacoes"
+            className="font-heading text-xl font-semibold tracking-tight text-foreground sm:text-2xl"
+          >
+            Histórico de interações
+          </h2>
           <button
             type="button"
-            aria-label="Ver materiais anteriores"
             aria-controls="material-mocks-carousel"
-            disabled={!canScrollPrevious}
-            onClick={() => scroll("previous")}
-            className="group absolute top-1/2 left-3 z-20 flex size-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white text-foreground shadow-md ring-1 ring-black/5 transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 active:scale-95 disabled:pointer-events-none disabled:opacity-0"
+            aria-expanded={showAll}
+            onClick={() => setShowAll((current) => !current)}
+            className="group inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-white/85 px-3 text-sm font-medium text-foreground shadow-sm ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 active:translate-y-0"
           >
-            <AltArrowLeftIcon
-              size={18}
-              strokeWidth={1.5}
-              className="transition-transform group-hover:-translate-x-0.5"
-            />
+            {showAll ? "Mostrar menos" : "Ver todos"}
+            {showAll ? (
+              <AltArrowLeftIcon
+                size={16}
+                strokeWidth={1.5}
+                className="transition-transform group-hover:-translate-x-0.5"
+              />
+            ) : (
+              <AltArrowRightIcon
+                size={16}
+                strokeWidth={1.5}
+                className="transition-transform group-hover:translate-x-0.5"
+              />
+            )}
           </button>
+        </div>
+        <div className="relative isolate">
+          {!showAll && (
+            <button
+              type="button"
+              aria-label="Ver materiais anteriores"
+              aria-controls="material-mocks-carousel"
+              disabled={!canScrollPrevious}
+              onClick={() => scroll("previous")}
+              className="group absolute top-1/2 left-3 z-20 flex size-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white text-foreground shadow-md ring-1 ring-black/5 transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 active:scale-95 disabled:pointer-events-none disabled:opacity-0"
+            >
+              <AltArrowLeftIcon
+                size={18}
+                strokeWidth={1.5}
+                className="transition-transform group-hover:-translate-x-0.5"
+              />
+            </button>
+          )}
           <div
             ref={trackRef}
             id="material-mocks-carousel"
-            className="no-scrollbar flex min-w-0 snap-x snap-mandatory scroll-px-1 gap-5 overflow-x-auto scroll-smooth px-1 py-1 sm:gap-6"
-            style={
-              carouselMaskImage
-                ? {
-                    maskImage: carouselMaskImage,
-                    WebkitMaskImage: carouselMaskImage,
-                  }
-                : undefined
-            }
+            className={cn(
+              showAll
+                ? "grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+                : "no-scrollbar flex min-w-0 snap-x snap-mandatory scroll-px-1 gap-5 overflow-x-auto scroll-smooth px-1 py-1 sm:gap-6"
+            )}
           >
             {materialMocks.map((material) => (
-              <MaterialMockCard key={material.title} material={material} />
+              <MaterialMockCard
+                key={material.title}
+                material={material}
+                expanded={showAll}
+              />
             ))}
           </div>
-          <button
-            type="button"
-            aria-label="Ver próximos materiais"
-            aria-controls="material-mocks-carousel"
-            disabled={!canScrollNext}
-            onClick={() => scroll("next")}
-            className="group absolute top-1/2 right-3 z-20 flex size-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white text-foreground shadow-md ring-1 ring-black/5 transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 active:scale-95 disabled:pointer-events-none disabled:opacity-0"
-          >
-            <AltArrowRightIcon
-              size={18}
-              strokeWidth={1.5}
-              className="transition-transform group-hover:translate-x-0.5"
-            />
-          </button>
+          {!showAll && (
+            <button
+              type="button"
+              aria-label="Ver próximos materiais"
+              aria-controls="material-mocks-carousel"
+              disabled={!canScrollNext}
+              onClick={() => scroll("next")}
+              className="group absolute top-1/2 right-3 z-20 flex size-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white text-foreground shadow-md ring-1 ring-black/5 transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 active:scale-95 disabled:pointer-events-none disabled:opacity-0"
+            >
+              <AltArrowRightIcon
+                size={18}
+                strokeWidth={1.5}
+                className="transition-transform group-hover:translate-x-0.5"
+              />
+            </button>
+          )}
         </div>
       </div>
     </section>
   )
 }
 
-function MaterialMockCard({ material }: { material: MaterialMock }) {
+function MaterialMockCard({
+  material,
+  expanded = false,
+}: {
+  material: MaterialMock
+  expanded?: boolean
+}) {
   const Illustration = material.Illustration
 
   return (
     <article
-      className="relative isolate h-[17.25rem] w-[min(17.75rem,calc(100vw-4rem))] shrink-0 snap-start overflow-hidden rounded-[24px] p-5 shadow-sm"
+      className={cn(
+        "relative isolate h-[17.25rem] overflow-hidden rounded-[24px] p-5 shadow-sm",
+        expanded
+          ? "w-full"
+          : "w-[min(17.75rem,calc(100vw-4rem))] shrink-0 snap-start"
+      )}
       style={{ backgroundColor: material.background }}
     >
       <span className="absolute top-5 left-5 z-10 inline-flex rounded-full bg-slate-900/60 px-2.5 py-1 text-xs font-semibold text-white">
@@ -414,28 +500,183 @@ function MaterialMockCard({ material }: { material: MaterialMock }) {
 }
 
 function Classrooms() {
-  const {
-    trackRef,
-    canScrollPrevious,
-    canScrollNext,
-    scroll,
-    maskImage: carouselMaskImage,
-  } = useHorizontalCarousel(classrooms.length + 1)
+  const [showAll, setShowAll] = useState(false)
+  const { trackRef, canScrollPrevious, canScrollNext, scroll } =
+    useHorizontalCarousel(classrooms.length + 1, { enabled: !showAll })
 
   return (
     <section className="px-4 pb-8 lg:px-6" aria-labelledby="turmas">
       <div className="mx-auto max-w-6xl">
-        <h2
-          id="turmas"
-          className="pb-4 font-heading text-xl font-semibold tracking-tight text-foreground sm:text-2xl"
-        >
-          Turmas
-        </h2>
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-4">
+          <h2
+            id="turmas"
+            className="font-heading text-xl font-semibold tracking-tight text-foreground sm:text-2xl"
+          >
+            Turmas
+          </h2>
+          <button
+            type="button"
+            aria-controls="classrooms-carousel"
+            aria-expanded={showAll}
+            onClick={() => setShowAll((current) => !current)}
+            className="group inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-white/85 px-3 text-sm font-medium text-foreground shadow-sm ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 active:translate-y-0"
+          >
+            {showAll ? "Mostrar menos" : "Ver todos"}
+            {showAll ? (
+              <AltArrowLeftIcon
+                size={16}
+                strokeWidth={1.5}
+                className="transition-transform group-hover:-translate-x-0.5"
+              />
+            ) : (
+              <AltArrowRightIcon
+                size={16}
+                strokeWidth={1.5}
+                className="transition-transform group-hover:translate-x-0.5"
+              />
+            )}
+          </button>
+        </div>
+        <div className="relative isolate">
+          {!showAll && (
+            <button
+              type="button"
+              aria-label="Ver turmas anteriores"
+              aria-controls="classrooms-carousel"
+              disabled={!canScrollPrevious}
+              onClick={() => scroll("previous")}
+              className="group absolute top-1/2 left-3 z-20 flex size-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white text-foreground shadow-md ring-1 ring-black/5 transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 active:scale-95 disabled:pointer-events-none disabled:opacity-0"
+            >
+              <AltArrowLeftIcon
+                size={18}
+                strokeWidth={1.5}
+                className="transition-transform group-hover:-translate-x-0.5"
+              />
+            </button>
+          )}
+          <div
+            ref={trackRef}
+            id="classrooms-carousel"
+            className={cn(
+              showAll
+                ? "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+                : "no-scrollbar flex min-w-0 snap-x snap-mandatory scroll-px-1 gap-4 overflow-x-auto scroll-smooth px-1 py-1 sm:gap-5"
+            )}
+          >
+            {classrooms.map((classroom) => (
+              <ClassroomCard
+                key={classroom.name}
+                classroom={classroom}
+                expanded={showAll}
+              />
+            ))}
+            <CreateClassroomCard expanded={showAll} />
+          </div>
+          {!showAll && (
+            <button
+              type="button"
+              aria-label="Ver próximas turmas"
+              aria-controls="classrooms-carousel"
+              disabled={!canScrollNext}
+              onClick={() => scroll("next")}
+              className="group absolute top-1/2 right-3 z-20 flex size-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white text-foreground shadow-md ring-1 ring-black/5 transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 active:scale-95 disabled:pointer-events-none disabled:opacity-0"
+            >
+              <AltArrowRightIcon
+                size={18}
+                strokeWidth={1.5}
+                className="transition-transform group-hover:translate-x-0.5"
+              />
+            </button>
+          )}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function ClassroomCard({
+  classroom,
+  expanded = false,
+}: {
+  classroom: Classroom
+  expanded?: boolean
+}) {
+  return (
+    <Link
+      href="/minhas-turmas"
+      aria-label={`Abrir turma ${classroom.name}`}
+      className={cn(
+        "group/card relative h-[92px] overflow-hidden rounded-[20px] px-5 text-left transition-[box-shadow,transform] duration-200 outline-none hover:-translate-y-0.5 focus-visible:ring-3 focus-visible:ring-orange-600/45 active:translate-y-0",
+        expanded
+          ? "w-full"
+          : "w-[min(15rem,calc(100vw-3rem))] shrink-0 snap-start"
+      )}
+      style={{ backgroundColor: classroom.background }}
+    >
+      <span className="relative z-10 flex h-full w-[55%] items-center justify-center text-center text-base font-semibold text-foreground">
+        {classroom.name}
+      </span>
+      <ClassroomIllustration
+        accent={classroom.accent}
+        softAccent={classroom.softAccent}
+        className="pointer-events-none absolute -right-5 -bottom-6 h-[118px] w-[160px] transition-transform duration-300 group-hover/card:-translate-y-1 group-hover/card:scale-[1.03] motion-reduce:transition-none"
+      />
+    </Link>
+  )
+}
+
+function CreateClassroomCard({ expanded = false }: { expanded?: boolean }) {
+  return (
+    <Link
+      href="/minhas-turmas#criar-turma"
+      aria-label="Criar uma turma"
+      className={cn(
+        "group/card relative flex h-[92px] items-center justify-center gap-2 overflow-hidden rounded-[20px] border border-dashed border-orange-300 bg-orange-50 px-5 text-center text-base font-semibold text-orange-800 transition-[background-color,transform] duration-200 outline-none hover:-translate-y-0.5 hover:bg-orange-100 focus-visible:ring-3 focus-visible:ring-orange-600/45 active:translate-y-0",
+        expanded
+          ? "w-full"
+          : "w-[min(15rem,calc(100vw-3rem))] shrink-0 snap-start"
+      )}
+    >
+      <span className="flex size-7 items-center justify-center rounded-full bg-orange-600 text-xl leading-none font-medium text-white transition-transform duration-200 group-hover/card:scale-110">
+        +
+      </span>
+      Criar turma
+    </Link>
+  )
+}
+
+function PlanningMocks() {
+  const { trackRef, canScrollPrevious, canScrollNext, scroll } =
+    useHorizontalCarousel(planningMocks.length)
+
+  return (
+    <section className="px-4 pb-8 lg:px-6" aria-labelledby="planejamentos">
+      <div className="mx-auto max-w-6xl">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-4">
+          <h2
+            id="planejamentos"
+            className="font-heading text-xl font-semibold tracking-tight text-foreground sm:text-2xl"
+          >
+            Planejamentos
+          </h2>
+          <Link
+            href="/meus-planejamentos"
+            className="group inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-white/85 px-3 text-sm font-medium text-foreground shadow-sm ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 active:translate-y-0"
+          >
+            Ver todos
+            <AltArrowRightIcon
+              size={16}
+              strokeWidth={1.5}
+              className="transition-transform group-hover:translate-x-0.5"
+            />
+          </Link>
+        </div>
+
         <div className="relative isolate">
           <button
             type="button"
-            aria-label="Ver turmas anteriores"
-            aria-controls="classrooms-carousel"
+            aria-label="Ver planejamentos anteriores"
+            aria-controls="planning-mocks-carousel"
             disabled={!canScrollPrevious}
             onClick={() => scroll("previous")}
             className="group absolute top-1/2 left-3 z-20 flex size-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white text-foreground shadow-md ring-1 ring-black/5 transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 active:scale-95 disabled:pointer-events-none disabled:opacity-0"
@@ -448,26 +689,17 @@ function Classrooms() {
           </button>
           <div
             ref={trackRef}
-            id="classrooms-carousel"
-            className="no-scrollbar flex min-w-0 snap-x snap-mandatory scroll-px-1 gap-4 overflow-x-auto scroll-smooth px-1 py-1 sm:gap-5"
-            style={
-              carouselMaskImage
-                ? {
-                    maskImage: carouselMaskImage,
-                    WebkitMaskImage: carouselMaskImage,
-                  }
-                : undefined
-            }
+            id="planning-mocks-carousel"
+            className="no-scrollbar flex min-w-0 snap-x snap-mandatory scroll-px-1 gap-5 overflow-x-auto scroll-smooth px-1 py-1 sm:gap-6"
           >
-            {classrooms.map((classroom) => (
-              <ClassroomCard key={classroom.name} classroom={classroom} />
+            {planningMocks.map((planning) => (
+              <PlanningMockCard key={planning.title} planning={planning} />
             ))}
-            <CreateClassroomCard />
           </div>
           <button
             type="button"
-            aria-label="Ver próximas turmas"
-            aria-controls="classrooms-carousel"
+            aria-label="Ver próximos planejamentos"
+            aria-controls="planning-mocks-carousel"
             disabled={!canScrollNext}
             onClick={() => scroll("next")}
             className="group absolute top-1/2 right-3 z-20 flex size-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white text-foreground shadow-md ring-1 ring-black/5 transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 active:scale-95 disabled:pointer-events-none disabled:opacity-0"
@@ -484,37 +716,28 @@ function Classrooms() {
   )
 }
 
-function ClassroomCard({ classroom }: { classroom: Classroom }) {
-  return (
-    <Link
-      href="/minhas-turmas"
-      aria-label={`Abrir turma ${classroom.name}`}
-      className="group/card relative h-[92px] w-[min(15rem,calc(100vw-3rem))] shrink-0 snap-start overflow-hidden rounded-[20px] px-5 text-left transition-[box-shadow,transform] duration-200 outline-none hover:-translate-y-0.5 focus-visible:ring-3 focus-visible:ring-orange-600/45 active:translate-y-0"
-      style={{ backgroundColor: classroom.background }}
-    >
-      <span className="relative z-10 flex h-full w-[55%] items-center justify-center text-center text-base font-semibold text-foreground">
-        {classroom.name}
-      </span>
-      <ClassroomIllustration
-        accent={classroom.accent}
-        softAccent={classroom.softAccent}
-        className="pointer-events-none absolute -right-5 -bottom-6 h-[118px] w-[160px] transition-transform duration-300 group-hover/card:-translate-y-1 group-hover/card:scale-[1.03] motion-reduce:transition-none"
-      />
-    </Link>
-  )
-}
+function PlanningMockCard({ planning }: { planning: PlanningMock }) {
+  const Illustration = planning.Illustration
 
-function CreateClassroomCard() {
   return (
     <Link
-      href="/minhas-turmas#criar-turma"
-      aria-label="Criar uma turma"
-      className="group/card relative flex h-[92px] w-[min(15rem,calc(100vw-3rem))] shrink-0 snap-start items-center justify-center gap-2 overflow-hidden rounded-[20px] border border-dashed border-orange-300 bg-orange-50 px-5 text-center text-base font-semibold text-orange-800 transition-[background-color,transform] duration-200 outline-none hover:-translate-y-0.5 hover:bg-orange-100 focus-visible:ring-3 focus-visible:ring-orange-600/45 active:translate-y-0"
+      href="/meus-planejamentos"
+      aria-label={`Abrir planejamento ${planning.title}`}
+      className="group/card relative isolate h-[17.25rem] w-[min(17.75rem,calc(100vw-4rem))] shrink-0 snap-start overflow-hidden rounded-[24px] p-5 shadow-sm transition-[box-shadow,transform] duration-200 hover:-translate-y-1 hover:shadow-lg focus-visible:ring-3 focus-visible:ring-orange-600/45 active:translate-y-0"
+      style={{ backgroundColor: planning.background }}
     >
-      <span className="flex size-7 items-center justify-center rounded-full bg-orange-600 text-xl leading-none font-medium text-white transition-transform duration-200 group-hover/card:scale-110">
-        +
+      <span className="absolute top-5 left-5 z-10 inline-flex rounded-full bg-slate-900/60 px-2.5 py-1 text-xs font-semibold text-white">
+        {planning.subject} · {planning.classroom}
       </span>
-      Criar turma
+      <Illustration className="pointer-events-none absolute top-[3.25rem] left-1/2 z-0 h-[10.25rem] w-[12.25rem] -translate-x-1/2 transition-transform duration-300 group-hover/card:-translate-y-1 group-hover/card:scale-[1.03] motion-reduce:transition-none" />
+      <span className="absolute right-5 bottom-5 left-5 z-10">
+        <span className="block text-lg font-semibold tracking-tight text-foreground">
+          {planning.title}
+        </span>
+        <span className="mt-1 block text-sm text-foreground/65">
+          {planning.updatedAt}
+        </span>
+      </span>
     </Link>
   )
 }

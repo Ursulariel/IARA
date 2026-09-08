@@ -45,9 +45,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <Image
                 src="/iara-icon.svg"
                 alt=""
-                width={80}
-                height={140}
-                className="h-8 w-auto"
+                width={280}
+                height={280}
+                className="size-10 object-contain"
               />
               <span className="sr-only">IARA</span>
             </SidebarMenuButton>

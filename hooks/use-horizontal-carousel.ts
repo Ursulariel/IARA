@@ -75,25 +75,5 @@ export function useHorizontalCarousel(
     canScrollPrevious,
     canScrollNext,
     scroll,
-    maskImage: getCarouselMaskImage(canScrollPrevious, canScrollNext),
   }
-}
-
-function getCarouselMaskImage(
-  canScrollPrevious: boolean,
-  canScrollNext: boolean
-) {
-  if (canScrollPrevious && canScrollNext) {
-    return "linear-gradient(to right, transparent 0%, black 3rem, black calc(100% - 3rem), transparent 100%)"
-  }
-
-  if (canScrollPrevious) {
-    return "linear-gradient(to right, transparent 0%, black 3rem, black 100%)"
-  }
-
-  if (canScrollNext) {
-    return "linear-gradient(to right, black 0%, black calc(100% - 3rem), transparent 100%)"
-  }
-
-  return undefined
 }

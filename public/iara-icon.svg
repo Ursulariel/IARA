@@ -1,4 +1,11 @@
-<svg width="80" height="140" viewBox="0 0 80 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="80" height="140" rx="40" fill="#FFF7ED"/>
-<circle cx="40" cy="42" r="35" transform="rotate(-90 40 42)" fill="#FB923C"/>
+<svg width="280" height="280" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="280" height="280" rx="140" fill="url(#paint0_linear_3045_966)"/>
+<rect x="100" y="70" width="80" height="140" rx="40" fill="#FCFCFC"/>
+<circle cx="140" cy="112" r="35" transform="rotate(-90 140 112)" fill="#FB923C"/>
+<defs>
+<linearGradient id="paint0_linear_3045_966" x1="241" y1="9.50694e-06" x2="31" y2="280" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FFDEC3"/>
+<stop offset="1" stop-color="#FF7C11"/>
+</linearGradient>
+</defs>
 </svg>

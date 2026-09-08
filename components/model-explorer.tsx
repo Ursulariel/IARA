@@ -358,13 +358,8 @@ function SubjectCarousel({
       normalizeSearch(`${card.label} ${card.value}`).includes(normalizedQuery)
     )
   }, [query])
-  const {
-    trackRef,
-    canScrollPrevious,
-    canScrollNext,
-    scroll,
-    maskImage: carouselMaskImage,
-  } = useHorizontalCarousel(filteredSubjectCards.length)
+  const { trackRef, canScrollPrevious, canScrollNext, scroll } =
+    useHorizontalCarousel(filteredSubjectCards.length)
 
   return (
     <section className="mt-10" aria-labelledby="pesquisa-por-materia">
@@ -395,14 +390,6 @@ function SubjectCarousel({
           ref={trackRef}
           id="subject-carousel"
           className="relative z-0 no-scrollbar flex min-w-0 snap-x snap-mandatory scroll-px-1 gap-5 overflow-x-auto scroll-smooth px-1 py-1 motion-reduce:scroll-auto sm:gap-7"
-          style={
-            carouselMaskImage
-              ? {
-                  maskImage: carouselMaskImage,
-                  WebkitMaskImage: carouselMaskImage,
-                }
-              : undefined
-          }
         >
           {filteredSubjectCards.length > 0 ? (
             filteredSubjectCards.map(
@@ -614,13 +601,8 @@ function ActivityTemplateCarousel({
       ).includes(normalizedQuery)
     })
   }, [query, subject])
-  const {
-    trackRef,
-    canScrollPrevious,
-    canScrollNext,
-    scroll,
-    maskImage: carouselMaskImage,
-  } = useHorizontalCarousel(filteredTemplates.length)
+  const { trackRef, canScrollPrevious, canScrollNext, scroll } =
+    useHorizontalCarousel(filteredTemplates.length)
 
   return (
     <section className="mt-10" aria-labelledby="materiais-sugeridos">
@@ -665,14 +647,6 @@ function ActivityTemplateCarousel({
           ref={trackRef}
           id="activity-template-carousel"
           className="relative z-0 no-scrollbar flex min-w-0 snap-x snap-mandatory scroll-px-1 gap-5 overflow-x-auto scroll-smooth px-1 py-1 motion-reduce:scroll-auto sm:gap-6"
-          style={
-            carouselMaskImage
-              ? {
-                  maskImage: carouselMaskImage,
-                  WebkitMaskImage: carouselMaskImage,
-                }
-              : undefined
-          }
         >
           {filteredTemplates.length > 0 ? (
             filteredTemplates.map(({ Illustration, ...template }) => {
