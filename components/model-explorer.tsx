@@ -205,7 +205,7 @@ export function ModelExplorer() {
 
   return (
     <div className="mx-auto mt-6 max-w-5xl">
-      <div className="relative isolate">
+      <div className="relative isolate mx-auto w-full max-w-2xl">
         <MagnifierIcon
           size={20}
           strokeWidth={1.5}

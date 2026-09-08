@@ -31,6 +31,10 @@ import {
   WordSearchMaterialIllustration,
 } from "@/components/home-material-illustrations"
 import { ClassroomIllustration } from "@/components/classroom-illustration"
+import {
+  ContextualActivityIllustration,
+  type ActivityTemplateId,
+} from "@/components/contextual-activity-illustrations"
 import { ModelExplorer } from "@/components/model-explorer"
 import {
   DebatePlanIllustration,
@@ -69,6 +73,15 @@ type PlanningMock = {
   classroom: string
   updatedAt: string
   Illustration: ComponentType<{ className?: string }>
+  background: string
+}
+
+type AssessmentMock = {
+  title: string
+  subject: "Língua Portuguesa" | "Redação" | "Matemática"
+  classroom: string
+  schoolYear: string
+  templateId: ActivityTemplateId
   background: string
 }
 
@@ -215,6 +228,49 @@ const planningMocks: PlanningMock[] = [
     classroom: "2º ano D",
     updatedAt: "Atualizado na semana passada",
     Illustration: DebatePlanIllustration,
+    background: "#F1E5FB",
+  },
+]
+
+const assessmentMocks: AssessmentMock[] = [
+  {
+    title: "Avaliação diagnóstica de leitura",
+    subject: "Língua Portuguesa",
+    classroom: "2º ano B",
+    schoolYear: "2",
+    templateId: "multiple-choice",
+    background: "#E5F0FF",
+  },
+  {
+    title: "Desafio de frações",
+    subject: "Matemática",
+    classroom: "5º ano A",
+    schoolYear: "5",
+    templateId: "fill-blank",
+    background: "#DCFCE7",
+  },
+  {
+    title: "Roteiro de revisão textual",
+    subject: "Redação",
+    classroom: "9º ano C",
+    schoolYear: "9",
+    templateId: "mixed-review",
+    background: "#FEE2E2",
+  },
+  {
+    title: "Leitura de gráficos",
+    subject: "Matemática",
+    classroom: "5º ano C",
+    schoolYear: "5",
+    templateId: "matching",
+    background: "#FEF3C7",
+  },
+  {
+    title: "Palavras e sentidos",
+    subject: "Língua Portuguesa",
+    classroom: "2º ano D",
+    schoolYear: "2",
+    templateId: "word-search",
     background: "#F1E5FB",
   },
 ]
@@ -375,6 +431,7 @@ export function CreationActions() {
           <MaterialMocks />
           <Classrooms />
           <PlanningMocks />
+          <AssessmentMocks />
         </>
       )}
     </div>
@@ -521,7 +578,7 @@ function Classrooms() {
             id="turmas"
             className="font-heading text-xl font-semibold tracking-tight text-foreground sm:text-2xl"
           >
-            Turmas
+            Acompanhar suas turmas
           </h2>
           <button
             type="button"
@@ -666,7 +723,7 @@ function PlanningMocks() {
             id="planejamentos"
             className="font-heading text-xl font-semibold tracking-tight text-foreground sm:text-2xl"
           >
-            Planejamentos
+            Seus planejamentos de aula
           </h2>
           <Link
             href="/meus-planejamentos"
@@ -722,6 +779,123 @@ function PlanningMocks() {
         </div>
       </div>
     </section>
+  )
+}
+
+function AssessmentMocks() {
+  const { trackRef, canScrollPrevious, canScrollNext, scroll } =
+    useHorizontalCarousel(assessmentMocks.length + 1)
+
+  return (
+    <section className="px-4 pb-8 lg:px-6" aria-labelledby="crie-uma-avaliacao">
+      <div className="mx-auto max-w-6xl">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-4">
+          <h2
+            id="crie-uma-avaliacao"
+            className="font-heading text-xl font-semibold tracking-tight text-foreground sm:text-2xl"
+          >
+            Crie uma avaliação
+          </h2>
+          <Link
+            href="/minhas-avaliacoes"
+            className="group inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full bg-white/85 px-3 text-sm font-medium text-foreground shadow-sm ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 active:translate-y-0"
+          >
+            Ver todos
+            <AltArrowRightIcon
+              size={16}
+              strokeWidth={1.5}
+              className="transition-transform group-hover:translate-x-0.5"
+            />
+          </Link>
+        </div>
+
+        <div className="relative isolate">
+          <button
+            type="button"
+            aria-label="Ver avaliações anteriores"
+            aria-controls="assessment-mocks-carousel"
+            disabled={!canScrollPrevious}
+            onClick={() => scroll("previous")}
+            className="group absolute top-1/2 left-3 z-20 flex size-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white text-foreground shadow-md ring-1 ring-black/5 transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 active:scale-95 disabled:pointer-events-none disabled:opacity-0"
+          >
+            <AltArrowLeftIcon
+              size={18}
+              strokeWidth={1.5}
+              className="transition-transform group-hover:-translate-x-0.5"
+            />
+          </button>
+          <div
+            ref={trackRef}
+            id="assessment-mocks-carousel"
+            className="no-scrollbar flex min-w-0 snap-x snap-mandatory scroll-px-1 gap-5 overflow-x-auto scroll-smooth px-1 py-1 sm:gap-6"
+          >
+            {assessmentMocks.map((assessment) => (
+              <AssessmentMockCard
+                key={assessment.title}
+                assessment={assessment}
+              />
+            ))}
+            <CreateAssessmentCard />
+          </div>
+          <button
+            type="button"
+            aria-label="Ver próximas avaliações"
+            aria-controls="assessment-mocks-carousel"
+            disabled={!canScrollNext}
+            onClick={() => scroll("next")}
+            className="group absolute top-1/2 right-3 z-20 flex size-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white text-foreground shadow-md ring-1 ring-black/5 transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 active:scale-95 disabled:pointer-events-none disabled:opacity-0"
+          >
+            <AltArrowRightIcon
+              size={18}
+              strokeWidth={1.5}
+              className="transition-transform group-hover:translate-x-0.5"
+            />
+          </button>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function AssessmentMockCard({ assessment }: { assessment: AssessmentMock }) {
+  const subjectLabel =
+    assessment.subject === "Redação" ? "Produção textual" : assessment.subject
+
+  return (
+    <Link
+      href="/minhas-avaliacoes"
+      aria-label={`Criar ${assessment.title}`}
+      className="group/card relative isolate h-[17.25rem] w-[min(17.75rem,calc(100vw-4rem))] shrink-0 snap-start overflow-hidden rounded-[24px] p-5 shadow-sm transition-[box-shadow,transform] duration-200 hover:-translate-y-1 hover:shadow-lg focus-visible:ring-3 focus-visible:ring-orange-600/45 active:translate-y-0"
+      style={{ backgroundColor: assessment.background }}
+    >
+      <span className="absolute top-5 left-5 z-10 inline-flex rounded-full bg-slate-900/60 px-2.5 py-1 text-xs font-semibold text-white">
+        {subjectLabel} · {assessment.classroom}
+      </span>
+      <ContextualActivityIllustration
+        subject={assessment.subject}
+        schoolYear={assessment.schoolYear}
+        templateId={assessment.templateId}
+        className="pointer-events-none absolute top-[3.25rem] left-1/2 z-0 h-[10.25rem] w-[12.25rem] -translate-x-1/2 transition-transform duration-300 group-hover/card:-translate-y-1 group-hover/card:scale-[1.03] motion-reduce:transition-none"
+      />
+      <span className="absolute right-5 bottom-5 left-5 z-10 text-lg font-semibold tracking-tight text-foreground">
+        {assessment.title}
+      </span>
+    </Link>
+  )
+}
+
+function CreateAssessmentCard() {
+  return (
+    <Link
+      href="/minhas-avaliacoes#criar-avaliacao"
+      aria-label="Criar uma avaliação"
+      className="group/card relative flex h-[17.25rem] w-[min(17.75rem,calc(100vw-4rem))] shrink-0 snap-start flex-col items-center justify-center gap-4 overflow-hidden rounded-[24px] border border-dashed border-orange-300 bg-orange-50 p-5 text-center text-lg font-semibold text-orange-800 transition-[background-color,transform] duration-200 outline-none hover:-translate-y-1 hover:bg-orange-100 focus-visible:ring-3 focus-visible:ring-orange-600/45 active:translate-y-0"
+    >
+      <span className="flex size-11 items-center justify-center rounded-full bg-orange-600 text-3xl leading-none font-medium text-white transition-transform duration-200 group-hover/card:scale-110">
+        +
+      </span>
+      Crie uma avaliação
+    </Link>
   )
 }
 
