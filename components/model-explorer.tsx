@@ -13,13 +13,10 @@ import { cn } from "cn"
 import { toast } from "sonner"
 
 import {
-  CategorizationActivityIllustration,
-  FillBlankActivityIllustration,
-  MatchingActivityIllustration,
-  MultipleChoiceActivityIllustration,
-  ReviewActivityIllustration,
-  SummaryActivityIllustration,
-} from "@/components/activity-template-illustrations"
+  ContextualActivityIllustration,
+  type ActivityTemplateId,
+} from "@/components/contextual-activity-illustrations"
+import { getActivityCardBackground } from "@/components/activity-illustration-worlds"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -319,6 +316,7 @@ export function ModelExplorer() {
         {subject ? (
           <ActivityTemplateCarousel
             subject={subject}
+            schoolYear={schoolYear}
             query={query}
             onSelect={setSelectedTemplate}
             onBack={returnToSubjects}
@@ -435,17 +433,9 @@ function SubjectCarousel({
 }
 
 type ActivityTemplate = {
-  id:
-    | "categorization"
-    | "summary"
-    | "mixed-review"
-    | "matching"
-    | "fill-blank"
-    | "multiple-choice"
+  id: ActivityTemplateId
   kind: string
   background: string
-  Illustration: ComponentType<{ className?: string }>
-  copy: Record<Subject, { title: string; description: string }>
 }
 
 type ActivitySetup = {
@@ -459,131 +449,189 @@ const activityTemplates: ActivityTemplate[] = [
     id: "categorization",
     kind: "Jogo",
     background: "#DDFBE6",
-    Illustration: CategorizationActivityIllustration,
-    copy: {
-      "Língua Portuguesa": {
-        title: "Categorização",
-        description: "Organize palavras e conceitos por grupos.",
-      },
-      Matemática: {
-        title: "Categorização",
-        description: "Agrupe números, formas e relações.",
-      },
-      Redação: {
-        title: "Categorização",
-        description: "Organize elementos e gêneros textuais.",
-      },
-    },
   },
   {
     id: "summary",
     kind: "Folha de atividades para impressão",
     background: "#DDDFFE",
-    Illustration: SummaryActivityIllustration,
-    copy: {
-      "Língua Portuguesa": {
-        title: "Escreva um resumo",
-        description: "Sintetize as ideias centrais de um texto.",
-      },
-      Matemática: {
-        title: "Explique a resolução",
-        description: "Registre o raciocínio usado no cálculo.",
-      },
-      Redação: {
-        title: "Escreva um resumo",
-        description: "Produza uma síntese clara e objetiva.",
-      },
-    },
   },
   {
     id: "mixed-review",
     kind: "Folha de atividades para impressão",
     background: "#D5D8FF",
-    Illustration: ReviewActivityIllustration,
-    copy: {
-      "Língua Portuguesa": {
-        title: "Revisão mista",
-        description: "Revise leitura, escrita e gramática.",
-      },
-      Matemática: {
-        title: "Revisão mista",
-        description: "Revise os principais conceitos estudados.",
-      },
-      Redação: {
-        title: "Revisão mista",
-        description: "Revise estrutura, coesão e revisão textual.",
-      },
-    },
   },
   {
     id: "matching",
     kind: "Quadro branco",
     background: "#DCEEFF",
-    Illustration: MatchingActivityIllustration,
-    copy: {
-      "Língua Portuguesa": {
-        title: "Correspondência rápida",
-        description: "Relacione palavras, sentidos e exemplos.",
-      },
-      Matemática: {
-        title: "Correspondência rápida",
-        description: "Relacione operações, resultados e representações.",
-      },
-      Redação: {
-        title: "Correspondência rápida",
-        description: "Relacione conectivos, ideias e funções.",
-      },
-    },
   },
   {
     id: "fill-blank",
     kind: "Jogo",
     background: "#DDF5F8",
-    Illustration: FillBlankActivityIllustration,
-    copy: {
-      "Língua Portuguesa": {
-        title: "Preencha os espaços",
-        description: "Complete frases com a opção adequada.",
-      },
-      Matemática: {
-        title: "Complete o cálculo",
-        description: "Preencha etapas e resultados da resolução.",
-      },
-      Redação: {
-        title: "Complete o texto",
-        description: "Complete trechos mantendo sentido e coesão.",
-      },
-    },
   },
   {
     id: "multiple-choice",
     kind: "Jogo",
     background: "#DCFBE6",
-    Illustration: MultipleChoiceActivityIllustration,
-    copy: {
-      "Língua Portuguesa": {
-        title: "Múltipla escolha",
-        description: "Verifique a compreensão do conteúdo.",
-      },
-      Matemática: {
-        title: "Múltipla escolha",
-        description: "Verifique o domínio dos conceitos.",
-      },
-      Redação: {
-        title: "Múltipla escolha",
-        description: "Verifique decisões de escrita e revisão.",
-      },
-    },
+  },
+  {
+    id: "word-search",
+    kind: "Folha para impressão",
+    background: "#FCE5C5",
+  },
+  {
+    id: "story-map",
+    kind: "Quadro branco",
+    background: "#F7DDF2",
   },
 ]
 
+type ActivityCopy = {
+  title: string
+  description: string
+}
+
+const activityCopyBySubject: Record<
+  Subject,
+  Record<ActivityTemplateId, ActivityCopy>
+> = {
+  "Língua Portuguesa": {
+    categorization: {
+      title: "Palavras em grupos",
+      description: "Organize palavras, imagens e sentidos por categorias.",
+    },
+    summary: {
+      title: "Ideias do texto",
+      description: "Registre as ideias principais de uma leitura.",
+    },
+    "mixed-review": {
+      title: "Missão de leitura",
+      description: "Revise leitura, escrita e convenções da língua.",
+    },
+    matching: {
+      title: "Palavra e sentido",
+      description: "Relacione palavras, pistas e significados.",
+    },
+    "fill-blank": {
+      title: "Complete a frase",
+      description: "Escolha palavras que completam o texto com sentido.",
+    },
+    "multiple-choice": {
+      title: "Desafio de interpretação",
+      description: "Verifique a compreensão de textos e enunciados.",
+    },
+    "word-search": {
+      title: "Caça-palavras temático",
+      description: "Encontre vocabulário relacionado ao tema estudado.",
+    },
+    "story-map": {
+      title: "Mapa da história",
+      description: "Organize personagens, cenário e acontecimentos.",
+    },
+  },
+  Matemática: {
+    categorization: {
+      title: "Números em grupos",
+      description: "Agrupe números, formas e relações matemáticas.",
+    },
+    summary: {
+      title: "Explique a estratégia",
+      description: "Registre como você resolveu o desafio matemático.",
+    },
+    "mixed-review": {
+      title: "Desafio matemático",
+      description: "Revise os conceitos estudados em uma missão guiada.",
+    },
+    matching: {
+      title: "Ligue e calcule",
+      description: "Relacione operações, resultados e representações.",
+    },
+    "fill-blank": {
+      title: "Complete o cálculo",
+      description: "Preencha etapas e resultados da resolução.",
+    },
+    "multiple-choice": {
+      title: "Quiz de matemática",
+      description: "Verifique o domínio dos conceitos trabalhados.",
+    },
+    "word-search": {
+      title: "Código numérico",
+      description: "Encontre pistas, números e conceitos no desafio.",
+    },
+    "story-map": {
+      title: "Mapa da resolução",
+      description: "Visualize os passos de uma estratégia matemática.",
+    },
+  },
+  Redação: {
+    categorization: {
+      title: "Peças do texto",
+      description: "Organize ideias, conectivos e gêneros textuais.",
+    },
+    summary: {
+      title: "Síntese autoral",
+      description: "Produza uma síntese clara, objetiva e bem estruturada.",
+    },
+    "mixed-review": {
+      title: "Oficina de revisão",
+      description: "Revise estrutura, coesão e escolhas de linguagem.",
+    },
+    matching: {
+      title: "Conectivos em ação",
+      description: "Relacione conectivos, ideias e funções no texto.",
+    },
+    "fill-blank": {
+      title: "Complete o parágrafo",
+      description: "Complete trechos mantendo sentido, coesão e autoria.",
+    },
+    "multiple-choice": {
+      title: "Decisões de escrita",
+      description: "Escolha revisões que fortalecem a produção textual.",
+    },
+    "word-search": {
+      title: "Vocabulário do tema",
+      description: "Explore palavras que ampliam o repertório de escrita.",
+    },
+    "story-map": {
+      title: "Roteiro de ideias",
+      description: "Planeje a progressão das ideias antes de escrever.",
+    },
+  },
+}
+
+function getActivityCopy(
+  template: ActivityTemplate,
+  subject: Subject,
+  schoolYear: string | null
+) {
+  const copy = activityCopyBySubject[subject][template.id]
+
+  if (!schoolYear) return copy
+
+  const year = Number(schoolYear)
+  const stageDescription =
+    year <= 3
+      ? "Proposta lúdica, com apoio visual para a etapa inicial."
+      : year <= 6
+        ? "Proposta contextualizada para ampliar estratégias e autonomia."
+        : "Proposta investigativa para aprofundar análise e argumentação."
+
+  return {
+    ...copy,
+    description: `${copy.description} ${stageDescription}`,
+  }
+}
+
 function ActivityTemplateCarousel({
   subject,
+  schoolYear,
   query,
   onSelect,
   onBack,
 }: {
   subject: Subject
+  schoolYear: string | null
   query: string
   onSelect: (template: ActivityTemplate) => void
   onBack: () => void
@@ -594,15 +642,19 @@ function ActivityTemplateCarousel({
     if (!normalizedQuery) return activityTemplates
 
     return activityTemplates.filter((template) => {
-      const copy = template.copy[subject]
+      const copy = getActivityCopy(template, subject, schoolYear)
 
       return normalizeSearch(
         `${template.kind} ${copy.title} ${copy.description}`
       ).includes(normalizedQuery)
     })
-  }, [query, subject])
+  }, [query, schoolYear, subject])
   const { trackRef, canScrollPrevious, canScrollNext, scroll } =
     useHorizontalCarousel(filteredTemplates.length)
+
+  useEffect(() => {
+    trackRef.current?.scrollTo({ left: 0, behavior: "auto" })
+  }, [query, schoolYear, subject, trackRef])
 
   return (
     <section className="mt-10" aria-labelledby="materiais-sugeridos">
@@ -649,21 +701,32 @@ function ActivityTemplateCarousel({
           className="relative z-0 no-scrollbar flex min-w-0 snap-x snap-mandatory scroll-px-1 gap-5 overflow-x-auto scroll-smooth px-1 py-1 motion-reduce:scroll-auto sm:gap-6"
         >
           {filteredTemplates.length > 0 ? (
-            filteredTemplates.map(({ Illustration, ...template }) => {
-              const copy = template.copy[subject]
+            filteredTemplates.map((template) => {
+              const copy = getActivityCopy(template, subject, schoolYear)
 
               return (
                 <button
                   key={template.id}
                   type="button"
-                  onClick={() => onSelect({ ...template, Illustration })}
+                  onClick={() => onSelect(template)}
                   className="group/template relative isolate h-[17.25rem] w-[min(17.75rem,calc(100vw-4rem))] shrink-0 cursor-pointer snap-start overflow-hidden rounded-[24px] p-5 text-left shadow-sm transition-[box-shadow,transform] duration-200 hover:-translate-y-1 hover:shadow-lg focus-visible:ring-3 focus-visible:ring-orange-600/45 active:translate-y-0"
-                  style={{ backgroundColor: template.background }}
+                  style={{
+                    backgroundColor: getActivityCardBackground(
+                      subject,
+                      schoolYear,
+                      template.background
+                    ),
+                  }}
                 >
                   <span className="absolute top-5 left-5 z-10 inline-flex rounded-full bg-slate-900/60 px-2.5 py-1 text-xs font-semibold text-white">
                     {template.kind}
                   </span>
-                  <Illustration className="pointer-events-none absolute top-[3.25rem] left-1/2 z-0 h-[10.25rem] w-[12.25rem] -translate-x-1/2 transition-transform duration-300 group-hover/template:-translate-y-1 group-hover/template:scale-[1.03] motion-reduce:transition-none" />
+                  <ContextualActivityIllustration
+                    subject={subject}
+                    schoolYear={schoolYear}
+                    templateId={template.id}
+                    className="pointer-events-none absolute top-[3.25rem] left-1/2 z-0 h-[10.25rem] w-[12.25rem] -translate-x-1/2 transition-transform duration-300 group-hover/template:-translate-y-1 group-hover/template:scale-[1.03] motion-reduce:transition-none"
+                  />
                   <span className="absolute right-5 bottom-5 left-5 z-10 text-lg font-semibold tracking-tight text-foreground">
                     {copy.title}
                   </span>
@@ -728,7 +791,7 @@ function ActivitySetupDialog({
     [topicQuery, topics]
   )
 
-  const copy = template.copy[draftSubject]
+  const copy = getActivityCopy(template, draftSubject, draftSchoolYear)
   const selectedTopic = topics.find((topic) => topic.code === draftTopicCode)
   const canCreate = Boolean(draftSchoolYear && selectedTopic)
 
@@ -747,7 +810,13 @@ function ActivitySetupDialog({
         <div className="grid h-[min(43rem,calc(100dvh-2rem))] grid-rows-[minmax(10rem,0.38fr)_minmax(0,1fr)] overflow-hidden rounded-[28px] bg-background shadow-2xl sm:grid-rows-[minmax(13rem,0.42fr)_minmax(0,1fr)] lg:h-[min(43rem,calc(100dvh-4rem))] lg:grid-cols-[minmax(0,1.35fr)_minmax(23rem,0.85fr)] lg:grid-rows-1">
           <div
             className="relative flex min-h-0 items-center justify-center overflow-hidden p-4 sm:p-6 lg:p-12"
-            style={{ backgroundColor: template.background }}
+            style={{
+              backgroundColor: getActivityCardBackground(
+                draftSubject,
+                draftSchoolYear,
+                template.background
+              ),
+            }}
           >
             <DialogClose
               aria-label="Fechar configuração da atividade"
@@ -759,7 +828,12 @@ function ActivitySetupDialog({
               <span className="self-start rounded-full bg-slate-900/60 px-2.5 py-1 text-xs font-semibold text-white">
                 {template.kind}
               </span>
-              <template.Illustration className="mt-2 h-24 w-full max-w-40 drop-shadow-sm sm:mt-3 sm:h-40 sm:max-w-xs lg:mt-5 lg:h-72 lg:max-w-sm" />
+              <ContextualActivityIllustration
+                subject={draftSubject}
+                schoolYear={draftSchoolYear}
+                templateId={template.id}
+                className="mt-2 h-24 w-full max-w-40 drop-shadow-sm sm:mt-3 sm:h-40 sm:max-w-xs lg:mt-5 lg:h-72 lg:max-w-sm"
+              />
               <p className="mt-1 max-w-sm text-center text-xs leading-5 text-slate-700 sm:mt-2 sm:text-sm sm:leading-6">
                 Personalize a atividade com a disciplina, o ano escolar e uma
                 habilidade da BNCC.

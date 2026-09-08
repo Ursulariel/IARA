@@ -226,6 +226,7 @@ export function CreationActions() {
     canScrollPrevious,
     canScrollNext,
     scroll: scrollActions,
+    maskImage: actionCarouselMaskImage,
   } = useHorizontalCarousel(actions.length, {
     enabled: view === "inicio",
     minimumScrollDistance: 160,
@@ -243,15 +244,15 @@ export function CreationActions() {
   }
 
   return (
-    <>
+    <div className={cn(view === "inicio" && "space-y-6")}>
       <section
         className="relative overflow-hidden px-4 pt-6 pb-8 sm:pt-8 lg:px-6"
         aria-labelledby="acoes-de-criacao"
       >
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-linear-to-b from-amber-50 via-white to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-linear-to-b from-amber-100 via-orange-50/70 to-transparent" />
         <div className="relative">
-          <div className="pointer-events-none absolute -top-20 -left-20 size-48 rounded-full bg-amber-200/45 blur-3xl" />
-          <div className="pointer-events-none absolute -top-4 -right-20 size-48 rounded-full bg-blue-200/45 blur-3xl" />
+          <div className="pointer-events-none absolute -top-20 -left-20 size-56 rounded-full bg-amber-300/60 blur-3xl" />
+          <div className="pointer-events-none absolute -top-4 -right-20 size-56 rounded-full bg-blue-300/55 blur-3xl" />
           <div className="relative">
             <div className="mx-auto max-w-2xl text-center">
               <h2
@@ -329,6 +330,14 @@ export function CreationActions() {
                     ref={actionsRef}
                     id="creation-actions-carousel"
                     className="mx-auto no-scrollbar flex w-full max-w-2xl min-w-0 snap-x snap-mandatory scroll-px-10 gap-5 overflow-x-auto scroll-smooth px-10 py-1 sm:mx-0 sm:scroll-px-1 sm:gap-7 sm:px-1"
+                    style={
+                      actionCarouselMaskImage
+                        ? {
+                            maskImage: actionCarouselMaskImage,
+                            WebkitMaskImage: actionCarouselMaskImage,
+                          }
+                        : undefined
+                    }
                   >
                     {actions.map((action) => (
                       <ActionIcon key={action.title} action={action} />
@@ -368,7 +377,7 @@ export function CreationActions() {
           <PlanningMocks />
         </>
       )}
-    </>
+    </div>
   )
 }
 
