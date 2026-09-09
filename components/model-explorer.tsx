@@ -1,7 +1,6 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import type { ComponentType } from "react"
 import { createPortal } from "react-dom"
 import { DocumentAddIcon } from "@solar-icons/react/bold/document-add"
 import { AltArrowDownIcon } from "@solar-icons/react/outline/alt-arrow-down"
@@ -27,11 +26,6 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import {
-  MathSubjectIllustration,
-  PortugueseSubjectIllustration,
-  WritingSubjectIllustration,
-} from "@/components/subject-card-illustrations"
-import {
   Select,
   SelectContent,
   SelectGroup,
@@ -42,7 +36,7 @@ import {
 import bnccCatalog from "@/data/bncc-topics.json"
 import { useHorizontalCarousel } from "@/hooks/use-horizontal-carousel"
 
-type Subject = "Língua Portuguesa" | "Redação" | "Matemática"
+type Subject = "Língua Portuguesa"
 
 type BnccTopic = {
   code: string
@@ -57,41 +51,18 @@ type BnccTopic = {
 type SubjectCard = {
   label: string
   value: Subject
-  background: string
-  Illustration: ComponentType<{ className?: string }>
 }
 
 const subjects: SubjectCard[] = [
   {
     label: "Língua Portuguesa",
     value: "Língua Portuguesa",
-    background: "#E7DCFF",
-    Illustration: PortugueseSubjectIllustration,
-  },
-  {
-    label: "Matemática",
-    value: "Matemática",
-    background: "#DCF4DF",
-    Illustration: MathSubjectIllustration,
-  },
-  {
-    label: "Produção textual",
-    value: "Redação",
-    background: "#D8E8FF",
-    Illustration: WritingSubjectIllustration,
   },
 ]
 
 const schoolYears = [
   { value: "1", label: "1º ano do Ensino Fundamental" },
   { value: "2", label: "2º ano do Ensino Fundamental" },
-  { value: "3", label: "3º ano do Ensino Fundamental" },
-  { value: "4", label: "4º ano do Ensino Fundamental" },
-  { value: "5", label: "5º ano do Ensino Fundamental" },
-  { value: "6", label: "6º ano do Ensino Fundamental" },
-  { value: "7", label: "7º ano do Ensino Fundamental" },
-  { value: "8", label: "8º ano do Ensino Fundamental" },
-  { value: "9", label: "9º ano do Ensino Fundamental" },
 ]
 
 const allTopics = bnccCatalog.topics as BnccTopic[]
@@ -112,12 +83,7 @@ function getTopicsForFilters(
   const year = Number(schoolYear)
 
   return allTopics.filter((topic) => {
-    if (!topic.years.includes(year)) return false
-    if (subject === "Redação") {
-      return topic.component === "Língua Portuguesa" && topic.writing
-    }
-
-    return topic.component === subject
+    return topic.years.includes(year) && topic.component === subject
   })
 }
 
@@ -298,9 +264,7 @@ export function ModelExplorer() {
 
       <p className="mt-3 text-center text-xs text-muted-foreground">
         {subject && schoolYear
-          ? subject === "Redação"
-            ? `${topics.length} habilidades de escrita e produção textual de Língua Portuguesa disponíveis para o ano selecionado.`
-            : `${topics.length} habilidades da BNCC disponíveis para os filtros selecionados.`
+          ? `${topics.length} habilidades da BNCC disponíveis para os filtros selecionados.`
           : "Selecione disciplina e ano para explorar as habilidades da BNCC."}
       </p>
 
@@ -391,18 +355,16 @@ function SubjectCarousel({
         >
           {filteredSubjectCards.length > 0 ? (
             filteredSubjectCards.map(
-              ({ Illustration, background, label, value }) => (
+              ({ label, value }) => (
                 <button
                   key={value}
                   type="button"
                   onClick={() => onSelect(value)}
-                  className="group/card relative h-[102px] w-[min(22.375rem,calc(100vw-3rem))] shrink-0 snap-start overflow-hidden rounded-[20px] px-5 text-left transition-[box-shadow,transform] duration-200 outline-none hover:-translate-y-0.5 focus-visible:ring-3 focus-visible:ring-orange-600/45 active:translate-y-0"
-                  style={{ backgroundColor: background }}
+                  className="group/card relative h-[102px] w-[min(22.375rem,calc(100vw-3rem))] shrink-0 snap-start overflow-hidden rounded-[20px] bg-neutral-100 px-5 text-left outline-none focus-visible:ring-3 focus-visible:ring-orange-600/45"
                 >
-                  <span className="relative z-10 flex h-full w-[55%] items-center justify-center text-center text-base font-semibold text-foreground">
+                  <span className="relative z-10 flex h-full w-full items-center justify-center text-center text-base font-semibold text-foreground">
                     {label}
                   </span>
-                  <Illustration className="pointer-events-none absolute -right-2 -bottom-2 h-[118px] w-[179px] transition-transform duration-300 group-hover/card:-translate-y-1 group-hover/card:scale-[1.03] motion-reduce:transition-none" />
                 </button>
               )
             )
@@ -530,74 +492,6 @@ const activityCopyBySubject: Record<
       description: "Organize personagens, cenário e acontecimentos.",
     },
   },
-  Matemática: {
-    categorization: {
-      title: "Números em grupos",
-      description: "Agrupe números, formas e relações matemáticas.",
-    },
-    summary: {
-      title: "Explique a estratégia",
-      description: "Registre como você resolveu o desafio matemático.",
-    },
-    "mixed-review": {
-      title: "Desafio matemático",
-      description: "Revise os conceitos estudados em uma missão guiada.",
-    },
-    matching: {
-      title: "Ligue e calcule",
-      description: "Relacione operações, resultados e representações.",
-    },
-    "fill-blank": {
-      title: "Complete o cálculo",
-      description: "Preencha etapas e resultados da resolução.",
-    },
-    "multiple-choice": {
-      title: "Quiz de matemática",
-      description: "Verifique o domínio dos conceitos trabalhados.",
-    },
-    "word-search": {
-      title: "Código numérico",
-      description: "Encontre pistas, números e conceitos no desafio.",
-    },
-    "story-map": {
-      title: "Mapa da resolução",
-      description: "Visualize os passos de uma estratégia matemática.",
-    },
-  },
-  Redação: {
-    categorization: {
-      title: "Peças do texto",
-      description: "Organize ideias, conectivos e gêneros textuais.",
-    },
-    summary: {
-      title: "Síntese autoral",
-      description: "Produza uma síntese clara, objetiva e bem estruturada.",
-    },
-    "mixed-review": {
-      title: "Oficina de revisão",
-      description: "Revise estrutura, coesão e escolhas de linguagem.",
-    },
-    matching: {
-      title: "Conectivos em ação",
-      description: "Relacione conectivos, ideias e funções no texto.",
-    },
-    "fill-blank": {
-      title: "Complete o parágrafo",
-      description: "Complete trechos mantendo sentido, coesão e autoria.",
-    },
-    "multiple-choice": {
-      title: "Decisões de escrita",
-      description: "Escolha revisões que fortalecem a produção textual.",
-    },
-    "word-search": {
-      title: "Vocabulário do tema",
-      description: "Explore palavras que ampliam o repertório de escrita.",
-    },
-    "story-map": {
-      title: "Roteiro de ideias",
-      description: "Planeje a progressão das ideias antes de escrever.",
-    },
-  },
 }
 
 function getActivityCopy(
@@ -709,24 +603,11 @@ function ActivityTemplateCarousel({
                   key={template.id}
                   type="button"
                   onClick={() => onSelect(template)}
-                  className="group/template relative isolate h-[17.25rem] w-[min(17.75rem,calc(100vw-4rem))] shrink-0 cursor-pointer snap-start overflow-hidden rounded-[24px] p-5 text-left shadow-sm transition-[box-shadow,transform] duration-200 hover:-translate-y-1 hover:shadow-lg focus-visible:ring-3 focus-visible:ring-orange-600/45 active:translate-y-0"
-                  style={{
-                    backgroundColor: getActivityCardBackground(
-                      subject,
-                      schoolYear,
-                      template.background
-                    ),
-                  }}
+                  className="group/template relative isolate h-36 w-[min(17.75rem,calc(100vw-4rem))] shrink-0 cursor-pointer snap-start overflow-hidden rounded-[24px] bg-neutral-100 p-5 text-left focus-visible:ring-3 focus-visible:ring-orange-600/45"
                 >
                   <span className="absolute top-5 left-5 z-10 inline-flex rounded-full bg-slate-900/60 px-2.5 py-1 text-xs font-semibold text-white">
                     {template.kind}
                   </span>
-                  <ContextualActivityIllustration
-                    subject={subject}
-                    schoolYear={schoolYear}
-                    templateId={template.id}
-                    className="pointer-events-none absolute top-[3.25rem] left-1/2 z-0 h-[10.25rem] w-[12.25rem] -translate-x-1/2 transition-transform duration-300 group-hover/template:-translate-y-1 group-hover/template:scale-[1.03] motion-reduce:transition-none"
-                  />
                   <span className="absolute right-5 bottom-5 left-5 z-10 text-lg font-semibold tracking-tight text-foreground">
                     {copy.title}
                   </span>

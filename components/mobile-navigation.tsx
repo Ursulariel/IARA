@@ -29,10 +29,17 @@ export function MobileNavigation() {
               <span
                 className={cn(
                   "flex size-8 shrink-0 items-center justify-center rounded-lg text-orange-800 transition-colors",
-                  isActive && "bg-orange-600 text-white"
+                  isActive &&
+                    "bg-white text-orange-600 shadow-sm ring-1 ring-orange-200"
                 )}
               >
-                <Icon size={24} strokeWidth={1.5} />
+                <Icon
+                  size={24}
+                  strokeWidth={1.5}
+                  color={isActive ? "#ea580c" : undefined}
+                  secondaryColor={isActive ? "#2563eb" : undefined}
+                  secondaryOpacity={isActive ? 1 : undefined}
+                />
               </span>
               <span className="w-full truncate text-center text-[9px] leading-3 font-medium tracking-[-0.025em]">
                 {item.label}

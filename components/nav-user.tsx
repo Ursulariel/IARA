@@ -40,13 +40,13 @@ export function NavUser({
             render={
               <SidebarMenuButton
                 aria-label="Abrir menu da conta"
-                className="size-13 justify-center rounded-(--radius) bg-transparent p-1! hover:bg-transparent aria-expanded:bg-sidebar-accent aria-expanded:text-sidebar-accent-foreground"
+                className="size-13 justify-center rounded-full bg-transparent p-1! hover:bg-transparent aria-expanded:bg-sidebar-accent aria-expanded:text-sidebar-accent-foreground"
               />
             }
           >
-            <Avatar className="size-11">
-              <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback className="bg-orange-100 text-sm font-semibold text-orange-700">
+            <Avatar className="size-11 rounded-full after:rounded-full">
+              <AvatarImage className="rounded-full" src={user.avatar} alt={user.name} />
+              <AvatarFallback className="rounded-full bg-orange-100 text-sm font-semibold text-orange-700">
                 CN
               </AvatarFallback>
             </Avatar>
@@ -60,9 +60,9 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                  <Avatar className="size-8">
-                    <AvatarImage src={user.avatar} alt={user.name} />
-                    <AvatarFallback>CN</AvatarFallback>
+                  <Avatar className="size-8 rounded-full after:rounded-full">
+                    <AvatarImage className="rounded-full" src={user.avatar} alt={user.name} />
+                    <AvatarFallback className="rounded-full">CN</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-medium">{user.name}</span>

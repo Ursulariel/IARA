@@ -1,0 +1,239 @@
+.canvas {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.icon {
+  display: block;
+  width: 28px;
+  height: 28px;
+  overflow: visible;
+}
+
+.calendar .icon > path,
+.writing .icon > path,
+.documents .icon > path,
+.diploma .icon > path {
+  transform-box: fill-box;
+}
+
+.calendar .icon > path:first-of-type {
+  transform-origin: center bottom;
+}
+
+.calendar .icon > path:nth-of-type(2) {
+  transform-origin: 75% 72%;
+}
+
+:global(.group:hover) .calendar .icon > path:first-of-type,
+:global(.group:focus-visible) .calendar .icon > path:first-of-type {
+  animation: settle-calendar-header 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+:global(.group:hover) .calendar .icon > path:nth-of-type(2),
+:global(.group:focus-visible) .calendar .icon > path:nth-of-type(2) {
+  animation: mark-calendar 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.writing .icon > path:nth-of-type(-n + 2) {
+  transform-origin: 20% 80%;
+}
+
+:global(.group:hover) .writing .icon > path:nth-of-type(-n + 2),
+:global(.group:focus-visible) .writing .icon > path:nth-of-type(-n + 2) {
+  animation: write-with-pencil 1.05s cubic-bezier(0.45, 0, 0.2, 1) both;
+}
+
+.notebook .icon {
+  transform-origin: 30% center;
+}
+
+:global(.group:hover) .notebook .icon,
+:global(.group:focus-visible) .notebook .icon {
+  animation: flip-notebook-page 1s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.statistics .icon {
+  transform-origin: center bottom;
+}
+
+:global(.group:hover) .statistics .icon,
+:global(.group:focus-visible) .statistics .icon {
+  animation: raise-statistics 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.student .icon {
+  transform-origin: center 78%;
+}
+
+:global(.group:hover) .student .icon,
+:global(.group:focus-visible) .student .icon {
+  animation: greet-student 540ms ease-in-out 2 both;
+}
+
+.documents .icon > path:first-of-type {
+  transform-origin: right center;
+}
+
+.documents .icon > path:nth-of-type(2) {
+  transform-origin: left center;
+}
+
+:global(.group:hover) .documents .icon > path:first-of-type,
+:global(.group:focus-visible) .documents .icon > path:first-of-type {
+  animation: paginate-left 1.05s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+:global(.group:hover) .documents .icon > path:nth-of-type(2),
+:global(.group:focus-visible) .documents .icon > path:nth-of-type(2) {
+  animation: paginate-right 1.05s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.diploma .icon > path:nth-of-type(n + 2) {
+  transform-box: view-box;
+  transform-origin: 50% 67%;
+}
+
+:global(.group:hover) .diploma .icon > path:nth-of-type(n + 2),
+:global(.group:focus-visible) .diploma .icon > path:nth-of-type(n + 2) {
+  animation: place-diploma-seal 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes settle-calendar-header {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  38% {
+    transform: translateY(-1.25px);
+  }
+  66% {
+    transform: translateY(0.4px);
+  }
+}
+
+@keyframes mark-calendar {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  34% {
+    transform: scale(0.94);
+  }
+  62% {
+    transform: scale(1.045);
+  }
+}
+
+@keyframes write-with-pencil {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  22% {
+    transform: translate(-1.5px, 1px) rotate(-4deg);
+  }
+  48% {
+    transform: translate(1.25px, -0.75px) rotate(3deg);
+  }
+  72% {
+    transform: translate(-0.8px, 0.6px) rotate(-2deg);
+  }
+}
+
+@keyframes flip-notebook-page {
+  0%,
+  100% {
+    transform: perspective(48px) rotateY(0deg);
+  }
+  36% {
+    transform: perspective(48px) rotateY(-18deg) skewY(-1deg);
+  }
+  62% {
+    transform: perspective(48px) rotateY(9deg) skewY(0.5deg);
+  }
+}
+
+@keyframes raise-statistics {
+  0%,
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+  24% {
+    transform: translateY(2px) scaleY(0.82);
+  }
+  68% {
+    transform: translateY(-0.75px) scaleY(1.05);
+  }
+}
+
+@keyframes greet-student {
+  0%,
+  100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  32% {
+    transform: rotate(-7deg) translateY(-0.5px);
+  }
+  68% {
+    transform: rotate(6deg) translateY(-0.5px);
+  }
+}
+
+@keyframes paginate-left {
+  0%,
+  100% {
+    opacity: 1;
+    transform: translateX(0) scaleY(1);
+  }
+  45% {
+    opacity: 0.55;
+    transform: translateX(-2.5px) scaleY(0.9);
+  }
+}
+
+@keyframes paginate-right {
+  0%,
+  100% {
+    opacity: 1;
+    transform: translateX(0) scaleY(1);
+  }
+  45% {
+    opacity: 0.55;
+    transform: translateX(2.5px) scaleY(0.9);
+  }
+}
+
+@keyframes place-diploma-seal {
+  0% {
+    opacity: 0;
+    transform: translateY(-5px) scale(0.65) rotate(-8deg);
+  }
+  62% {
+    opacity: 1;
+    transform: translateY(0.5px) scale(1.08) rotate(3deg);
+  }
+  78% {
+    transform: translateY(-0.25px) scale(0.97) rotate(-1deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calendar .icon > path,
+  .writing .icon > path,
+  .notebook .icon,
+  .statistics .icon,
+  .student .icon,
+  .documents .icon > path,
+  .diploma .icon > path {
+    animation: none !important;
+  }
+}

@@ -39,7 +39,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               aria-label="IARA"
-              className="flex h-10 items-center justify-center rounded-lg p-0! hover:bg-transparent"
+              className="flex h-16 items-center justify-center rounded-lg p-0! hover:bg-transparent"
               render={<Link href="/inicio" />}
             >
               <Image
@@ -47,7 +47,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 alt=""
                 width={280}
                 height={280}
-                className="size-10 object-contain"
+                className="size-14 object-contain"
               />
               <span className="sr-only">IARA</span>
             </SidebarMenuButton>

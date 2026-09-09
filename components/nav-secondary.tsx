@@ -31,12 +31,12 @@ export function NavSecondary({
               <SidebarMenuButton
                 tooltip={item.title}
                 render={<a href={item.url} />}
-                className="h-16 flex-col justify-center gap-1 rounded-lg bg-transparent px-0.5 py-1.5 text-[10px] leading-3 tracking-[-0.025em] text-orange-800 hover:bg-transparent hover:text-orange-800 active:bg-transparent active:text-orange-800 [&>span:last-child]:w-full! [&>span:last-child]:max-w-full! [&>span:last-child]:overflow-hidden! [&>span:last-child]:text-center [&>span:last-child]:text-clip! [&>span:last-child]:whitespace-nowrap!"
+                className="h-16 flex-col justify-center gap-1 rounded-lg bg-transparent px-0.5 py-1.5 text-[10px] leading-3 tracking-[-0.025em] text-sidebar-foreground hover:bg-transparent hover:text-sidebar-foreground active:bg-transparent active:text-sidebar-foreground [&>span:last-child]:w-full! [&>span:last-child]:max-w-full! [&>span:last-child]:overflow-hidden! [&>span:last-child]:text-center [&>span:last-child]:text-clip! [&>span:last-child]:whitespace-nowrap!"
               >
-                <span className="flex size-8 shrink-0 items-center justify-center rounded-lg text-orange-800 transition-colors group-hover/menu-button:bg-orange-100 group-hover/menu-button:text-orange-800 [&_svg]:size-6!">
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-lg text-sidebar-foreground transition-colors group-hover/menu-button:bg-sidebar-accent group-hover/menu-button:text-sidebar-accent-foreground [&_svg]:size-6!">
                   {item.icon}
                 </span>
-                <span className="text-orange-800">{item.title}</span>
+                <span className="text-sidebar-foreground">{item.title}</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
