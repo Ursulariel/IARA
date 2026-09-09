@@ -7,6 +7,7 @@ import type {
   KeyboardEvent,
   ReactNode,
 } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { ChatRoundIcon } from "@solar-icons/react/bold/chat-round"
 import { PlaneIcon } from "@solar-icons/react/bold/plane"
@@ -28,6 +29,7 @@ import {
   TableIllustration,
   TextDocumentIllustration,
 } from "@/components/document-card-illustrations"
+import { NavUser } from "@/components/nav-user"
 import { useHorizontalCarousel } from "@/hooks/use-horizontal-carousel"
 
 type Action = {
@@ -111,6 +113,11 @@ const actions: Action[] = [
     color: "#2563eb",
   },
 ]
+
+const account = {
+  name: "shadcn",
+  email: "m@example.com",
+}
 
 const materialMocks: MaterialMock[] = [
   {
@@ -286,7 +293,7 @@ export function CreationActions() {
   return (
     <div className={cn(view === "inicio" && "space-y-6")}>
       <section
-        className="relative overflow-hidden px-4 pt-6 pb-8 sm:pt-8 lg:px-6"
+        className="relative overflow-hidden px-4 pt-3 pb-8 sm:pt-5 lg:px-6"
         aria-labelledby="acoes-de-criacao"
       >
         <div
@@ -305,13 +312,30 @@ export function CreationActions() {
           <div className="pointer-events-none absolute -top-20 -left-20 size-56 rounded-full bg-amber-300/60 blur-3xl" />
           <div className="pointer-events-none absolute -top-4 -right-20 size-56 rounded-full bg-blue-300/55 blur-3xl" />
           <div className="relative">
-            <div className="mx-auto max-w-2xl text-center">
+            <div className="mx-auto flex max-w-6xl items-center justify-between">
+              <Link
+                href="/inicio"
+                aria-label="IARA"
+                className="flex h-11 items-center outline-none focus-visible:ring-3 focus-visible:ring-orange-600/45 sm:h-12"
+              >
+                <Image
+                  src="/iara-logo-full.svg"
+                  alt="IARA"
+                  width={380}
+                  height={140}
+                  className="h-8 w-auto object-contain sm:h-9"
+                  priority
+                />
+              </Link>
+              <NavUser user={account} />
+            </div>
+            <div className="mx-auto mt-10 max-w-2xl text-center sm:mt-12">
               <h2
                 id="acoes-de-criacao"
                 className="animate-iara-gradient bg-clip-text font-heading text-3xl font-medium tracking-tight text-transparent sm:text-4xl"
               >
                 {view === "inicio"
-                  ? "Como a IARA pode ajudar?"
+                  ? "Qual ideia vamos transformar hoje?"
                   : "Explore modelos para sua aula"}
               </h2>
             </div>
