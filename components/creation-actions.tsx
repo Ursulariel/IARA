@@ -78,13 +78,13 @@ type AssessmentMock = {
 
 const actions: Action[] = [
   {
-    title: "Planejamento de aula",
-    icon: "calendar",
+    title: "Criar avaliação",
+    icon: "writing",
     color: "#ea580c",
   },
   {
-    title: "Criar avaliação",
-    icon: "writing",
+    title: "Planejamento de aula",
+    icon: "calendar",
     color: "#ea580c",
   },
   {
@@ -335,7 +335,7 @@ export function CreationActions() {
                 className="animate-iara-gradient bg-clip-text font-heading text-3xl font-medium tracking-tight text-transparent sm:text-4xl"
               >
                 {view === "inicio"
-                  ? "Qual ideia vamos transformar hoje?"
+                  ? "O que vamos criar para sua turma hoje?"
                   : "Explore modelos para sua aula"}
               </h2>
             </div>
@@ -447,10 +447,10 @@ export function CreationActions() {
       </section>
       {view === "inicio" && (
         <>
+          <AssessmentMocks />
           <Classrooms />
           <PlanningMocks />
           <MaterialMocks />
-          <AssessmentMocks />
         </>
       )}
     </div>

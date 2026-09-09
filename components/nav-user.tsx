@@ -32,7 +32,7 @@ export function NavUser({
           <button
             type="button"
             aria-label="Abrir menu da conta"
-            className="flex size-13 cursor-pointer items-center justify-center rounded-full bg-white/85 p-1 outline-none shadow-sm ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus-visible:ring-3 focus-visible:ring-orange-600/45 active:translate-y-0"
+            className="flex size-13 cursor-pointer items-center justify-center rounded-full border border-white/80 bg-white/30 p-1 shadow-[0_4px_16px_rgba(255,255,255,0.2)] outline-none backdrop-blur-xl transition-colors hover:bg-white/45 focus-visible:ring-3 focus-visible:ring-orange-600/45"
           />
         }
       >
