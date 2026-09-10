@@ -43,7 +43,6 @@ import {
   TextDocumentIllustration,
 } from "@/components/document-card-illustrations"
 import { DateRangePicker } from "@/components/ui/date-range-picker"
-import { NavUser } from "@/components/nav-user"
 import { useHorizontalCarousel } from "@/hooks/use-horizontal-carousel"
 import bnccCatalog from "@/data/bncc-topics.json"
 
@@ -149,11 +148,6 @@ const actions: Action[] = [
     color: "#2563eb",
   },
 ]
-
-const account = {
-  name: "shadcn",
-  email: "m@example.com",
-}
 
 function contentHref(title: string) {
   const slug = title
@@ -410,7 +404,7 @@ export function CreationActions() {
           <div className="pointer-events-none absolute -top-20 -left-20 size-56 rounded-full bg-amber-300/60 blur-3xl" />
           <div className="pointer-events-none absolute -top-4 -right-20 size-56 rounded-full bg-blue-300/55 blur-3xl" />
           <div className="relative">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center">
               <Link
                 href="/inicio"
                 aria-label="IARA"
@@ -425,7 +419,6 @@ export function CreationActions() {
                   priority
                 />
               </Link>
-              <NavUser user={account} />
             </div>
             <div className="mx-auto mt-10 max-w-2xl text-center sm:mt-12">
               <h2
