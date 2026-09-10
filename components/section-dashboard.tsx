@@ -42,7 +42,7 @@ type FilterState = {
 }
 
 const bnccTopics = (bnccCatalog.topics as BnccTopic[]).filter(
-  (topic) => topic.component === "Língua Portuguesa"
+  (topic) => topic.component === "Língua Portuguesa" && topic.years.some((year) => year === 1 || year === 2)
 )
 
 const dashboardContent: Record<
