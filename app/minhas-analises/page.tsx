@@ -1,9 +1,10 @@
 import { AppPageLayout } from "@/components/app-page-layout"
+import { SectionDashboard } from "@/components/section-dashboard"
 
 export default function Page() {
   return (
     <AppPageLayout>
-      <div className="flex flex-1" />
+      <SectionDashboard section="analises" />
     </AppPageLayout>
   )
 }
