@@ -461,7 +461,7 @@ export function CreationActions() {
               <div
                 ref={actionsRef}
                 id="creation-actions-carousel"
-                className="mx-auto no-scrollbar flex w-full max-w-2xl min-w-0 snap-x snap-mandatory scroll-px-10 gap-5 overflow-x-auto scroll-smooth px-10 py-1 sm:mx-0 sm:scroll-px-1 sm:gap-7 sm:px-1 lg:max-w-none lg:snap-none lg:scroll-px-0 lg:justify-between lg:gap-0 lg:overflow-visible lg:px-0"
+                className="mx-auto no-scrollbar flex w-full max-w-2xl min-w-0 snap-x snap-mandatory scroll-px-10 gap-4 overflow-x-auto scroll-smooth px-10 py-1 sm:mx-0 sm:scroll-px-1 sm:gap-5 sm:px-1 lg:max-w-none lg:snap-none lg:scroll-px-0 lg:justify-center lg:gap-5 lg:overflow-visible lg:px-0"
                 style={
                   actionCarouselMaskImage
                     ? {
