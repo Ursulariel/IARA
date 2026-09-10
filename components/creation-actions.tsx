@@ -1,10 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import type {
-  ComponentType,
-  ReactNode,
-} from "react"
+import type { ComponentType, ReactNode } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { createPortal } from "react-dom"
@@ -45,6 +42,7 @@ import {
   type PaletteName,
   TextDocumentIllustration,
 } from "@/components/document-card-illustrations"
+import { DateRangePicker } from "@/components/ui/date-range-picker"
 import { NavUser } from "@/components/nav-user"
 import { useHorizontalCarousel } from "@/hooks/use-horizontal-carousel"
 import bnccCatalog from "@/data/bncc-topics.json"
@@ -175,7 +173,9 @@ function HistoryClassroomIllustration({
   className?: string
   palette: PaletteName
 }) {
-  return <ClassroomIllustration letter="A" palette={palette} className={className} />
+  return (
+    <ClassroomIllustration letter="A" palette={palette} className={className} />
+  )
 }
 
 const materialMocks: MaterialMock[] = [
@@ -436,65 +436,65 @@ export function CreationActions() {
               </h2>
             </div>
             <div className="mx-auto mt-6 flex max-w-2xl items-center gap-2 rounded-2xl border border-blue-200/80 bg-white/90 p-1.5 pl-3 shadow-sm backdrop-blur">
-                  <ChatRoundIcon size={20} color="#3b82f6" />
-                  <input
-                    type="text"
-                    aria-label="Mensagem para a IARA"
-                    placeholder="Converse com a IARA ou escolha uma ação abaixo"
-                    className="h-9 min-w-0 flex-1 bg-transparent px-1 text-sm outline-none placeholder:text-muted-foreground"
-                  />
-                  <button
-                    type="button"
-                    aria-label="Enviar mensagem"
-                    className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-orange-600 text-white transition-colors hover:bg-orange-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
-                  >
-                    <PlaneIcon size={18} strokeWidth={1.5} />
-                  </button>
-                </div>
+              <ChatRoundIcon size={20} color="#3b82f6" />
+              <input
+                type="text"
+                aria-label="Mensagem para a IARA"
+                placeholder="Converse com a IARA ou escolha uma ação abaixo"
+                className="h-9 min-w-0 flex-1 bg-transparent px-1 text-sm outline-none placeholder:text-muted-foreground"
+              />
+              <button
+                type="button"
+                aria-label="Enviar mensagem"
+                className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-orange-600 text-white transition-colors hover:bg-orange-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+              >
+                <PlaneIcon size={18} strokeWidth={1.5} />
+              </button>
+            </div>
             <div className="relative mx-auto mt-7 sm:flex sm:items-center sm:justify-center sm:gap-3">
-                  <CarouselButton
-                    label="Ver ações anteriores"
-                    onClick={() => scrollActions("previous")}
-                    disabled={!canScrollPrevious}
-                    controls="creation-actions-carousel"
-                    className="absolute top-3 left-0 z-20 !mt-0 sm:!static sm:!mt-3 sm:self-start lg:hidden"
-                  >
-                    <AltArrowLeftIcon
-                      size={18}
-                      strokeWidth={1.5}
-                      className="transition-transform duration-200 group-hover:-translate-x-0.5"
-                    />
-                  </CarouselButton>
-                  <div
-                    ref={actionsRef}
-                    id="creation-actions-carousel"
-                    className="mx-auto no-scrollbar flex w-full max-w-2xl min-w-0 snap-x snap-mandatory scroll-px-10 gap-5 overflow-x-auto scroll-smooth px-10 py-1 sm:mx-0 sm:scroll-px-1 sm:gap-7 sm:px-1 lg:max-w-none lg:snap-none lg:scroll-px-0 lg:justify-between lg:gap-0 lg:overflow-visible lg:px-0"
-                    style={
-                      actionCarouselMaskImage
-                        ? {
-                            maskImage: actionCarouselMaskImage,
-                            WebkitMaskImage: actionCarouselMaskImage,
-                          }
-                        : undefined
-                    }
-                  >
-                    {actions.map((action) => (
-                      <ActionIcon key={action.title} action={action} />
-                    ))}
-                  </div>
-                  <CarouselButton
-                    label="Ver próximas ações"
-                    onClick={() => scrollActions("next")}
-                    disabled={!canScrollNext}
-                    controls="creation-actions-carousel"
-                    className="absolute top-3 right-0 z-20 !mt-0 sm:!static sm:!mt-3 sm:self-start lg:hidden"
-                  >
-                    <AltArrowRightIcon
-                      size={18}
-                      strokeWidth={1.5}
-                      className="transition-transform duration-200 group-hover:translate-x-0.5"
-                    />
-                  </CarouselButton>
+              <CarouselButton
+                label="Ver ações anteriores"
+                onClick={() => scrollActions("previous")}
+                disabled={!canScrollPrevious}
+                controls="creation-actions-carousel"
+                className="absolute top-3 left-0 z-20 !mt-0 sm:!static sm:!mt-3 sm:self-start lg:hidden"
+              >
+                <AltArrowLeftIcon
+                  size={18}
+                  strokeWidth={1.5}
+                  className="transition-transform duration-200 group-hover:-translate-x-0.5"
+                />
+              </CarouselButton>
+              <div
+                ref={actionsRef}
+                id="creation-actions-carousel"
+                className="mx-auto no-scrollbar flex w-full max-w-2xl min-w-0 snap-x snap-mandatory scroll-px-10 gap-5 overflow-x-auto scroll-smooth px-10 py-1 sm:mx-0 sm:scroll-px-1 sm:gap-7 sm:px-1 lg:max-w-none lg:snap-none lg:scroll-px-0 lg:justify-between lg:gap-0 lg:overflow-visible lg:px-0"
+                style={
+                  actionCarouselMaskImage
+                    ? {
+                        maskImage: actionCarouselMaskImage,
+                        WebkitMaskImage: actionCarouselMaskImage,
+                      }
+                    : undefined
+                }
+              >
+                {actions.map((action) => (
+                  <ActionIcon key={action.title} action={action} />
+                ))}
+              </div>
+              <CarouselButton
+                label="Ver próximas ações"
+                onClick={() => scrollActions("next")}
+                disabled={!canScrollNext}
+                controls="creation-actions-carousel"
+                className="absolute top-3 right-0 z-20 !mt-0 sm:!static sm:!mt-3 sm:self-start lg:hidden"
+              >
+                <AltArrowRightIcon
+                  size={18}
+                  strokeWidth={1.5}
+                  className="transition-transform duration-200 group-hover:translate-x-0.5"
+                />
+              </CarouselButton>
             </div>
           </div>
         </div>
@@ -524,10 +524,7 @@ function MaterialMocks() {
     useHorizontalCarousel(materialMocks.length)
 
   return (
-    <section
-      className="px-6 pb-8"
-      aria-labelledby="historico-de-interacoes"
-    >
+    <section className="px-6 pb-8" aria-labelledby="historico-de-interacoes">
       <div>
         <div className="flex flex-wrap items-center justify-between gap-3 pb-4">
           <h2
@@ -717,9 +714,9 @@ function CreateClassroomCard({ onCreate }: { onCreate: () => void }) {
       type="button"
       onClick={onCreate}
       aria-label="Criar uma turma"
-      className="group/card relative flex h-[92px] w-[min(15rem,calc(100vw-3rem))] shrink-0 snap-start items-center justify-center gap-2 overflow-hidden rounded-[20px] border-2 border-dashed border-neutral-300 bg-neutral-100 px-5 text-center text-base font-semibold text-foreground outline-none transition-[background-color,border-color] duration-200 ease-out hover:border-orange-400 hover:bg-orange-50 focus-visible:ring-3 focus-visible:ring-orange-600/45"
+      className="group/card relative flex h-[92px] w-[min(15rem,calc(100vw-3rem))] shrink-0 snap-start items-center justify-center gap-2 overflow-hidden rounded-[20px] border-2 border-dashed border-neutral-300 bg-neutral-100 px-5 text-center text-base font-semibold text-foreground transition-[background-color,border-color] duration-200 ease-out outline-none hover:border-orange-400 hover:bg-orange-50 focus-visible:ring-3 focus-visible:ring-orange-600/45"
     >
-      <span className="flex size-7 origin-center items-center justify-center rounded-full bg-orange-600 text-white transition-transform duration-200 ease-out group-hover/card:rotate-90 group-hover/card:scale-110 motion-reduce:transition-none motion-reduce:group-hover/card:rotate-0 motion-reduce:group-hover/card:scale-100">
+      <span className="flex size-7 origin-center items-center justify-center rounded-full bg-orange-600 text-white transition-transform duration-200 ease-out group-hover/card:scale-110 group-hover/card:rotate-90 motion-reduce:transition-none motion-reduce:group-hover/card:scale-100 motion-reduce:group-hover/card:rotate-0">
         <IconPlus aria-hidden="true" size={18} stroke={2} />
       </span>
       Criar turma
@@ -727,16 +724,19 @@ function CreateClassroomCard({ onCreate }: { onCreate: () => void }) {
   )
 }
 
-function CreateClassroomDialog({
+export function CreateClassroomDialog({
   open,
   onOpenChange,
+  onCreated,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
+  onCreated?: (classroom: { schoolYear: string; letter: string }) => void
 }) {
   const [schoolYear, setSchoolYear] = useState("1")
   const [letter, setLetter] = useState("A")
-  const palette: PaletteName = schoolYear === "1" ? "orange-light" : "blue-light"
+  const palette: PaletteName =
+    schoolYear === "1" ? "orange-light" : "blue-light"
   const classroomName = `${schoolYear}º ano ${letter.toUpperCase() || "A"}`
 
   return (
@@ -801,7 +801,7 @@ function CreateClassroomDialog({
                   >
                     <SelectTrigger
                       aria-labelledby="create-classroom-year-label"
-                      className="w-full cursor-pointer rounded-xl bg-white px-3 shadow-none data-[size=default]:!h-11 focus-visible:border-orange-500 focus-visible:ring-orange-500/35"
+                      className="w-full cursor-pointer rounded-xl bg-white px-3 shadow-none focus-visible:border-orange-500 focus-visible:ring-orange-500/35 data-[size=default]:!h-11"
                     >
                       <SelectValue placeholder="Selecione um ano" />
                     </SelectTrigger>
@@ -829,7 +829,9 @@ function CreateClassroomDialog({
                     id="create-classroom-letter"
                     value={letter}
                     onChange={(event) =>
-                      setLetter(event.target.value.replace(/[^a-zA-Z]/g, "").slice(0, 1))
+                      setLetter(
+                        event.target.value.replace(/[^a-zA-Z]/g, "").slice(0, 1)
+                      )
                     }
                     placeholder="Ex.: A"
                     maxLength={1}
@@ -846,6 +848,10 @@ function CreateClassroomDialog({
               <Button
                 type="button"
                 onClick={() => {
+                  onCreated?.({
+                    schoolYear,
+                    letter: letter.toUpperCase() || "A",
+                  })
                   toast.success("Turma criada", {
                     description: `${classroomName} está pronta para receber materiais e atividades.`,
                   })
@@ -879,19 +885,26 @@ function CurriculumFields({
   idPrefix: string
   classroomField: ReactNode
 }) {
-  const topics = bnccTopics.filter((topic) => topic.years.includes(Number(schoolYear)))
+  const topics = bnccTopics.filter((topic) =>
+    topic.years.includes(Number(schoolYear))
+  )
 
   return (
     <>
       <div className="grid gap-2">
-        <span className="text-sm font-semibold text-foreground">Disciplina</span>
+        <span className="text-sm font-semibold text-foreground">
+          Disciplina
+        </span>
         <div className="flex h-11 items-center rounded-xl bg-muted/50 px-3 text-sm text-foreground">
           Língua Portuguesa
         </div>
       </div>
       <div className="grid gap-2 sm:grid-cols-2">
         <div className="grid gap-2">
-          <label id={`${idPrefix}-year-label`} className="text-sm font-semibold text-foreground">
+          <label
+            id={`${idPrefix}-year-label`}
+            className="text-sm font-semibold text-foreground"
+          >
             Ano escolar
           </label>
           <Select
@@ -903,13 +916,20 @@ function CurriculumFields({
             }}
             items={schoolYearOptions}
           >
-            <SelectTrigger aria-labelledby={`${idPrefix}-year-label`} className="w-full cursor-pointer rounded-xl bg-white px-3 shadow-none data-[size=default]:!h-11 focus-visible:border-orange-500 focus-visible:ring-orange-500/35">
+            <SelectTrigger
+              aria-labelledby={`${idPrefix}-year-label`}
+              className="w-full cursor-pointer rounded-xl bg-white px-3 shadow-none focus-visible:border-orange-500 focus-visible:ring-orange-500/35 data-[size=default]:!h-11"
+            >
               <SelectValue placeholder="Ano" />
             </SelectTrigger>
             <SelectContent align="start" positionerClassName="z-[70]">
               <SelectGroup>
                 {schoolYearOptions.map((year) => (
-                  <SelectItem key={year.value} value={year.value} className="cursor-pointer">
+                  <SelectItem
+                    key={year.value}
+                    value={year.value}
+                    className="cursor-pointer"
+                  >
                     {year.label}
                   </SelectItem>
                 ))}
@@ -920,7 +940,10 @@ function CurriculumFields({
         {classroomField}
       </div>
       <div className="grid gap-2">
-        <label id={`${idPrefix}-topic-label`} className="text-sm font-semibold text-foreground">
+        <label
+          id={`${idPrefix}-topic-label`}
+          className="text-sm font-semibold text-foreground"
+        >
           Tópico da BNCC
         </label>
         <BnccTopicPicker
@@ -947,7 +970,12 @@ function BnccTopicPicker({
 }) {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState("")
-  const [position, setPosition] = useState<{ top: number; left: number; width: number; height: number } | null>(null)
+  const [position, setPosition] = useState<{
+    top: number
+    left: number
+    width: number
+    height: number
+  } | null>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const popupRef = useRef<HTMLDivElement>(null)
   const searchRef = useRef<HTMLInputElement>(null)
@@ -996,11 +1024,19 @@ function BnccTopicPicker({
     const roomBelow = viewportHeight - rect.bottom - popupGap - edgeGap
     const roomAbove = rect.top - popupGap - edgeGap
     const openBelow = roomBelow >= 320 || roomBelow >= roomAbove
-    const maxHeight = Math.max(1, Math.min(500, openBelow ? roomBelow : roomAbove))
+    const maxHeight = Math.max(
+      1,
+      Math.min(500, openBelow ? roomBelow : roomAbove)
+    )
 
     setPosition({
-      top: openBelow ? rect.bottom + popupGap : Math.max(edgeGap, rect.top - popupGap - maxHeight),
-      left: Math.min(Math.max(edgeGap, rect.right - width), viewportWidth - width - edgeGap),
+      top: openBelow
+        ? rect.bottom + popupGap
+        : Math.max(edgeGap, rect.top - popupGap - maxHeight),
+      left: Math.min(
+        Math.max(edgeGap, rect.right - width),
+        viewportWidth - width - edgeGap
+      ),
       width,
       height: maxHeight,
     })
@@ -1011,7 +1047,10 @@ function BnccTopicPicker({
 
     function closeOnOutside(event: PointerEvent) {
       const target = event.target as Node
-      if (!triggerRef.current?.contains(target) && !popupRef.current?.contains(target)) {
+      if (
+        !triggerRef.current?.contains(target) &&
+        !popupRef.current?.contains(target)
+      ) {
         setOpen(false)
         setQuery("")
       }
@@ -1056,104 +1095,159 @@ function BnccTopicPicker({
         aria-expanded={open}
         aria-controls={open ? id : undefined}
         onClick={togglePicker}
-        className="flex h-11 w-full cursor-pointer items-center justify-between gap-2 rounded-xl border border-input bg-white px-3 text-sm text-foreground shadow-none outline-none transition-[background-color,border-color,box-shadow] hover:border-blue-500 hover:bg-blue-50 focus-visible:border-orange-500 focus-visible:ring-3 focus-visible:ring-orange-500/35"
+        className="flex h-11 w-full cursor-pointer items-center justify-between gap-2 rounded-xl border border-input bg-white px-3 text-sm text-foreground shadow-none transition-[background-color,border-color,box-shadow] outline-none hover:border-orange-400 hover:bg-orange-50 focus-visible:border-orange-500 focus-visible:ring-3 focus-visible:ring-orange-500/35"
       >
         <span className="min-w-0 flex-1 truncate text-left">
           {selectedTopic?.title ?? "Selecione um tópico"}
         </span>
-        <AltArrowDownIcon size={16} strokeWidth={1.5} className={cn("shrink-0 transition-transform", open && "rotate-180")} />
+        <AltArrowDownIcon
+          size={16}
+          strokeWidth={1.5}
+          className={cn("shrink-0 transition-transform", open && "rotate-180")}
+        />
       </button>
 
-      {open && position && createPortal(
-        <div
-          ref={popupRef}
-          id={id}
-          role="dialog"
-          aria-label="Selecionar tópico da BNCC"
-          className="fixed z-[80] flex origin-top animate-in flex-col overflow-hidden rounded-2xl bg-popover text-popover-foreground shadow-xl ring-1 ring-foreground/10 fade-in-0 outline-none zoom-in-95"
-          style={position}
-        >
-          <div className="shrink-0 border-b p-4 pb-3">
-            <div className="mb-3 flex items-center justify-between gap-4">
-              <h3 className="font-heading text-lg font-semibold text-foreground">
-                Tópicos da BNCC
-              </h3>
-              <button
-                type="button"
-                aria-label="Fechar tópicos da BNCC"
-                onClick={() => {
-                  setOpen(false)
-                  setQuery("")
-                  triggerRef.current?.focus()
-                }}
-                className="flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
-              >
-                <IconX size={18} stroke={1.8} />
-              </button>
+      {open &&
+        position &&
+        createPortal(
+          <div
+            ref={popupRef}
+            id={id}
+            role="dialog"
+            aria-label="Selecionar tópico da BNCC"
+            className="fixed z-[80] flex origin-top animate-in flex-col overflow-hidden rounded-2xl bg-popover text-popover-foreground shadow-xl ring-1 ring-foreground/10 fade-in-0 outline-none zoom-in-95"
+            style={position}
+          >
+            <div className="shrink-0 border-b p-4 pb-3">
+              <div className="mb-3 flex items-center justify-between gap-4">
+                <h3 className="font-heading text-lg font-semibold text-foreground">
+                  Tópicos da BNCC
+                </h3>
+                <button
+                  type="button"
+                  aria-label="Fechar tópicos da BNCC"
+                  onClick={() => {
+                    setOpen(false)
+                    setQuery("")
+                    triggerRef.current?.focus()
+                  }}
+                  className="flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                >
+                  <IconX size={18} stroke={1.8} />
+                </button>
+              </div>
+              <div className="relative">
+                <MagnifierIcon
+                  size={20}
+                  strokeWidth={1.5}
+                  className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground"
+                />
+                <Input
+                  ref={searchRef}
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  aria-label="Pesquisar tópicos da BNCC"
+                  placeholder="Pesquise tópicos ou códigos..."
+                  className="h-11 rounded-xl bg-background pr-3 pl-10 shadow-none focus-visible:border-orange-500 focus-visible:ring-orange-500/35"
+                />
+              </div>
+              <p className="pt-2 text-xs text-muted-foreground">
+                {filteredTopics.length} habilidade
+                {filteredTopics.length === 1 ? "" : "s"} encontrada
+                {filteredTopics.length === 1 ? "" : "s"}
+              </p>
             </div>
-            <div className="relative">
-              <MagnifierIcon size={20} strokeWidth={1.5} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                ref={searchRef}
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                aria-label="Pesquisar tópicos da BNCC"
-                placeholder="Pesquise tópicos ou códigos..."
-                className="h-11 rounded-xl bg-background pr-3 pl-10 shadow-none focus-visible:border-orange-500 focus-visible:ring-orange-500/35"
-              />
+            <div
+              role="radiogroup"
+              aria-label="Tópicos da BNCC"
+              className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-2"
+            >
+              {filteredTopics.length ? (
+                filteredTopics.map((topic) => {
+                  const isSelected = topic.code === selectedCode
+                  return (
+                    <label
+                      key={topic.code}
+                      className={cn(
+                        "group/topic flex cursor-pointer items-start gap-3 rounded-xl p-3 transition-colors hover:bg-blue-100 has-[:focus-visible]:bg-blue-100 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-blue-600/45",
+                        isSelected && "bg-blue-50"
+                      )}
+                    >
+                      <input
+                        type="radio"
+                        name={id}
+                        value={topic.code}
+                        checked={isSelected}
+                        onChange={() => {
+                          onSelect(topic.code)
+                          setOpen(false)
+                          setQuery("")
+                          triggerRef.current?.focus()
+                        }}
+                        className="sr-only"
+                      />
+                      <span
+                        aria-hidden="true"
+                        className={cn(
+                          "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border border-muted-foreground/60",
+                          isSelected && "border-blue-600 bg-blue-600"
+                        )}
+                      >
+                        {isSelected && (
+                          <span className="size-2 rounded-full bg-white" />
+                        )}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-sm font-medium text-foreground">
+                          {topic.title}
+                        </span>
+                        <span className="mt-1 line-clamp-3 block text-sm leading-5 text-muted-foreground">
+                          {topic.description}
+                        </span>
+                        <span className="mt-1.5 block text-xs font-medium text-muted-foreground">
+                          ({topic.code})
+                          {topic.context ? ` · ${topic.context}` : ""}
+                        </span>
+                      </span>
+                    </label>
+                  )
+                })
+              ) : (
+                <p className="px-3 py-8 text-center text-sm text-muted-foreground">
+                  Nenhum tópico encontrado para essa busca.
+                </p>
+              )}
             </div>
-            <p className="pt-2 text-xs text-muted-foreground">{filteredTopics.length} habilidade{filteredTopics.length === 1 ? "" : "s"} encontrada{filteredTopics.length === 1 ? "" : "s"}</p>
-          </div>
-          <div role="radiogroup" aria-label="Tópicos da BNCC" className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-2">
-            {filteredTopics.length ? filteredTopics.map((topic) => {
-              const isSelected = topic.code === selectedCode
-              return (
-                <label key={topic.code} className={cn("group/topic flex cursor-pointer items-start gap-3 rounded-xl p-3 transition-colors hover:bg-blue-100 has-[:focus-visible]:bg-blue-100 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-blue-600/45", isSelected && "bg-blue-50")}>
-                  <input
-                    type="radio"
-                    name={id}
-                    value={topic.code}
-                    checked={isSelected}
-                    onChange={() => {
-                      onSelect(topic.code)
-                      setOpen(false)
-                      setQuery("")
-                      triggerRef.current?.focus()
-                    }}
-                    className="sr-only"
-                  />
-                  <span aria-hidden="true" className={cn("mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border border-muted-foreground/60", isSelected && "border-blue-600 bg-blue-600")}>
-                    {isSelected && <span className="size-2 rounded-full bg-white" />}
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-sm font-medium text-foreground">{topic.title}</span>
-                    <span className="mt-1 line-clamp-3 block text-sm leading-5 text-muted-foreground">{topic.description}</span>
-                    <span className="mt-1.5 block text-xs font-medium text-muted-foreground">({topic.code}){topic.context ? ` · ${topic.context}` : ""}</span>
-                  </span>
-                </label>
-              )
-            }) : <p className="px-3 py-8 text-center text-sm text-muted-foreground">Nenhum tópico encontrado para essa busca.</p>}
-          </div>
-          <p className="shrink-0 border-t bg-muted/30 px-4 py-2.5 text-xs text-muted-foreground">Objetos de conhecimento, descrições e códigos da BNCC 2018.</p>
-        </div>,
-        document.body
-      )}
+            <p className="shrink-0 border-t bg-muted/30 px-4 py-2.5 text-xs text-muted-foreground">
+              Objetos de conhecimento, descrições e códigos da BNCC 2018.
+            </p>
+          </div>,
+          document.body
+        )}
     </>
   )
 }
 
-function CreateAssessmentDialog({
+export function CreateAssessmentDialog({
   open,
   onOpenChange,
+  onCreated,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
+  onCreated?: (assessment: {
+    title: string
+    schoolYear: string
+    classroom: string
+    topicCode: string
+  }) => void
 }) {
   const [schoolYear, setSchoolYear] = useState("1")
   const [classroom, setClassroom] = useState("A")
   const [title, setTitle] = useState("")
   const [topicCode, setTopicCode] = useState("")
-  const palette: PaletteName = schoolYear === "1" ? "orange-light" : "blue-light"
+  const palette: PaletteName =
+    schoolYear === "1" ? "orange-light" : "blue-light"
   const classroomName = `${schoolYear}º ano ${classroom.toUpperCase() || "A"}`
 
   return (
@@ -1165,7 +1259,9 @@ function CreateAssessmentDialog({
         <div className="grid h-[min(39rem,calc(100dvh-2rem))] grid-rows-[minmax(11rem,0.4fr)_minmax(0,1fr)] overflow-hidden rounded-[28px] bg-background shadow-2xl sm:grid-rows-[minmax(14rem,0.45fr)_minmax(0,1fr)] lg:h-[min(34rem,calc(100dvh-4rem))] lg:grid-cols-[minmax(0,1.1fr)_minmax(22rem,0.9fr)] lg:grid-rows-1">
           <div
             className="relative flex min-h-0 items-center justify-center overflow-hidden p-6 sm:p-8 lg:p-12"
-            style={{ backgroundColor: schoolYear === "1" ? "#ffedd5" : "#dbeafe" }}
+            style={{
+              backgroundColor: schoolYear === "1" ? "#ffedd5" : "#dbeafe",
+            }}
           >
             <DialogClose
               aria-label="Fechar criação de avaliação"
@@ -1182,15 +1278,22 @@ function CreateAssessmentDialog({
                 className="mt-3 h-36 w-full max-w-[18rem] drop-shadow-sm sm:h-48 lg:h-60"
               />
               <p className="mt-2 max-w-sm text-sm leading-6 text-slate-700">
-                Crie uma avaliação alinhada à turma e acompanhe as evidências de aprendizagem.
+                Crie uma avaliação alinhada à turma e acompanhe as evidências de
+                aprendizagem.
               </p>
             </div>
           </div>
 
-          <div data-bncc-modal-panel className="flex min-h-0 flex-col bg-background">
+          <div
+            data-bncc-modal-panel
+            className="flex min-h-0 flex-col bg-background"
+          >
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-5 sm:p-7">
               <DialogTitle>Criar uma avaliação</DialogTitle>
-              <DialogDescription id="create-assessment-description" className="mt-2">
+              <DialogDescription
+                id="create-assessment-description"
+                className="mt-2"
+              >
                 Defina a turma e o título para preparar sua nova avaliação.
               </DialogDescription>
 
@@ -1203,13 +1306,22 @@ function CreateAssessmentDialog({
                   onTopicChange={setTopicCode}
                   classroomField={
                     <div className="grid gap-2">
-                      <label htmlFor="create-assessment-classroom" className="text-sm font-semibold text-foreground">
+                      <label
+                        htmlFor="create-assessment-classroom"
+                        className="text-sm font-semibold text-foreground"
+                      >
                         Turma
                       </label>
                       <Input
                         id="create-assessment-classroom"
                         value={classroom}
-                        onChange={(event) => setClassroom(event.target.value.replace(/[^a-zA-Z]/g, "").slice(0, 1))}
+                        onChange={(event) =>
+                          setClassroom(
+                            event.target.value
+                              .replace(/[^a-zA-Z]/g, "")
+                              .slice(0, 1)
+                          )
+                        }
                         maxLength={1}
                         className="h-11 rounded-xl bg-white px-3 text-base uppercase shadow-none focus-visible:border-orange-500 focus-visible:ring-orange-500/35"
                       />
@@ -1217,7 +1329,10 @@ function CreateAssessmentDialog({
                   }
                 />
                 <div className="grid gap-2">
-                  <label htmlFor="create-assessment-title" className="text-sm font-semibold text-foreground">
+                  <label
+                    htmlFor="create-assessment-title"
+                    className="text-sm font-semibold text-foreground"
+                  >
                     Título da avaliação
                   </label>
                   <Input
@@ -1238,6 +1353,12 @@ function CreateAssessmentDialog({
                 type="button"
                 disabled={!title.trim() || !classroom || !topicCode}
                 onClick={() => {
+                  onCreated?.({
+                    title: title.trim(),
+                    schoolYear,
+                    classroom: classroom.toUpperCase() || "A",
+                    topicCode,
+                  })
                   toast.success("Avaliação criada", {
                     description: `${title.trim()} foi preparada para ${classroomName}.`,
                   })
@@ -1255,18 +1376,31 @@ function CreateAssessmentDialog({
   )
 }
 
-function CreatePlanningDialog({
+export function CreatePlanningDialog({
   open,
   onOpenChange,
+  onCreated,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
+  onCreated?: (planning: {
+    title: string
+    schoolYear: string
+    classroom: string
+    topicCode: string
+    period: { from?: Date; to?: Date }
+  }) => void
 }) {
   const [schoolYear, setSchoolYear] = useState("1")
   const [classroom, setClassroom] = useState("A")
   const [title, setTitle] = useState("")
   const [topicCode, setTopicCode] = useState("")
-  const palette: PaletteName = schoolYear === "1" ? "orange-light" : "blue-light"
+  const [planningPeriod, setPlanningPeriod] = useState<{
+    from?: Date
+    to?: Date
+  }>({})
+  const palette: PaletteName =
+    schoolYear === "1" ? "orange-light" : "blue-light"
   const classroomName = `${schoolYear}º ano ${classroom.toUpperCase() || "A"}`
 
   return (
@@ -1278,7 +1412,9 @@ function CreatePlanningDialog({
         <div className="grid h-[min(39rem,calc(100dvh-2rem))] grid-rows-[minmax(11rem,0.4fr)_minmax(0,1fr)] overflow-hidden rounded-[28px] bg-background shadow-2xl sm:grid-rows-[minmax(14rem,0.45fr)_minmax(0,1fr)] lg:h-[min(34rem,calc(100dvh-4rem))] lg:grid-cols-[minmax(0,1.1fr)_minmax(22rem,0.9fr)] lg:grid-rows-1">
           <div
             className="relative flex min-h-0 items-center justify-center overflow-hidden p-6 sm:p-8 lg:p-12"
-            style={{ backgroundColor: schoolYear === "1" ? "#ffedd5" : "#dbeafe" }}
+            style={{
+              backgroundColor: schoolYear === "1" ? "#ffedd5" : "#dbeafe",
+            }}
           >
             <DialogClose
               aria-label="Fechar criação de planejamento"
@@ -1300,10 +1436,16 @@ function CreatePlanningDialog({
             </div>
           </div>
 
-          <div data-bncc-modal-panel className="flex min-h-0 flex-col bg-background">
+          <div
+            data-bncc-modal-panel
+            className="flex min-h-0 flex-col bg-background"
+          >
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-5 sm:p-7">
               <DialogTitle>Criar um planejamento</DialogTitle>
-              <DialogDescription id="create-planning-description" className="mt-2">
+              <DialogDescription
+                id="create-planning-description"
+                className="mt-2"
+              >
                 Selecione a turma, o tópico e o objetivo para preparar a aula.
               </DialogDescription>
 
@@ -1316,13 +1458,22 @@ function CreatePlanningDialog({
                   onTopicChange={setTopicCode}
                   classroomField={
                     <div className="grid gap-2">
-                      <label htmlFor="create-planning-classroom" className="text-sm font-semibold text-foreground">
+                      <label
+                        htmlFor="create-planning-classroom"
+                        className="text-sm font-semibold text-foreground"
+                      >
                         Turma
                       </label>
                       <Input
                         id="create-planning-classroom"
                         value={classroom}
-                        onChange={(event) => setClassroom(event.target.value.replace(/[^a-zA-Z]/g, "").slice(0, 1))}
+                        onChange={(event) =>
+                          setClassroom(
+                            event.target.value
+                              .replace(/[^a-zA-Z]/g, "")
+                              .slice(0, 1)
+                          )
+                        }
                         maxLength={1}
                         className="h-11 rounded-xl bg-white px-3 text-base uppercase shadow-none focus-visible:border-orange-500 focus-visible:ring-orange-500/35"
                       />
@@ -1330,7 +1481,10 @@ function CreatePlanningDialog({
                   }
                 />
                 <div className="grid gap-2">
-                  <label htmlFor="create-planning-title" className="text-sm font-semibold text-foreground">
+                  <label
+                    htmlFor="create-planning-title"
+                    className="text-sm font-semibold text-foreground"
+                  >
                     Título do planejamento
                   </label>
                   <Input
@@ -1344,6 +1498,15 @@ function CreatePlanningDialog({
                     O planejamento será preparado para {classroomName}.
                   </p>
                 </div>
+                <div className="grid gap-2">
+                  <label className="text-sm font-semibold text-foreground">
+                    Período do planejamento
+                  </label>
+                  <DateRangePicker
+                    value={planningPeriod}
+                    onValueChange={setPlanningPeriod}
+                  />
+                </div>
               </div>
             </div>
             <div className="border-t bg-white p-4 sm:p-5">
@@ -1351,6 +1514,13 @@ function CreatePlanningDialog({
                 type="button"
                 disabled={!title.trim() || !classroom || !topicCode}
                 onClick={() => {
+                  onCreated?.({
+                    title: title.trim(),
+                    schoolYear,
+                    classroom: classroom.toUpperCase() || "A",
+                    topicCode,
+                    period: planningPeriod,
+                  })
                   toast.success("Planejamento criado", {
                     description: `${title.trim()} foi preparado para ${classroomName}.`,
                   })
@@ -1446,9 +1616,9 @@ function CreatePlanningCard({ onCreate }: { onCreate: () => void }) {
       type="button"
       onClick={onCreate}
       aria-label="Criar um planejamento"
-      className="group/card relative flex h-[17.25rem] w-[min(17.75rem,calc(100vw-4rem))] shrink-0 snap-start flex-col items-center justify-center gap-4 overflow-hidden rounded-[24px] border-2 border-dashed border-neutral-300 bg-neutral-100 p-5 text-center text-lg font-semibold text-foreground outline-none transition-[background-color,border-color] duration-200 ease-out hover:border-orange-400 hover:bg-orange-50 focus-visible:ring-3 focus-visible:ring-orange-600/45"
+      className="group/card relative flex h-[17.25rem] w-[min(17.75rem,calc(100vw-4rem))] shrink-0 snap-start flex-col items-center justify-center gap-4 overflow-hidden rounded-[24px] border-2 border-dashed border-neutral-300 bg-neutral-100 p-5 text-center text-lg font-semibold text-foreground transition-[background-color,border-color] duration-200 ease-out outline-none hover:border-orange-400 hover:bg-orange-50 focus-visible:ring-3 focus-visible:ring-orange-600/45"
     >
-      <span className="flex size-11 origin-center items-center justify-center rounded-full bg-orange-600 text-white transition-transform duration-200 ease-out group-hover/card:rotate-90 group-hover/card:scale-110 motion-reduce:transition-none motion-reduce:group-hover/card:rotate-0 motion-reduce:group-hover/card:scale-100">
+      <span className="flex size-11 origin-center items-center justify-center rounded-full bg-orange-600 text-white transition-transform duration-200 ease-out group-hover/card:scale-110 group-hover/card:rotate-90 motion-reduce:transition-none motion-reduce:group-hover/card:scale-100 motion-reduce:group-hover/card:rotate-0">
         <IconPlus aria-hidden="true" size={24} stroke={2} />
       </span>
       <span>Crie um planejamento</span>
@@ -1566,9 +1736,9 @@ function CreateAssessmentCard({ onCreate }: { onCreate: () => void }) {
       type="button"
       onClick={onCreate}
       aria-label="Criar uma avaliação"
-      className="group/card relative flex h-[17.25rem] w-[min(17.75rem,calc(100vw-4rem))] shrink-0 snap-start flex-col items-center justify-center gap-4 overflow-hidden rounded-[24px] border-2 border-dashed border-neutral-300 bg-neutral-100 p-5 text-center text-lg font-semibold text-foreground outline-none transition-[background-color,border-color] duration-200 ease-out hover:border-orange-400 hover:bg-orange-50 focus-visible:ring-3 focus-visible:ring-orange-600/45"
+      className="group/card relative flex h-[17.25rem] w-[min(17.75rem,calc(100vw-4rem))] shrink-0 snap-start flex-col items-center justify-center gap-4 overflow-hidden rounded-[24px] border-2 border-dashed border-neutral-300 bg-neutral-100 p-5 text-center text-lg font-semibold text-foreground transition-[background-color,border-color] duration-200 ease-out outline-none hover:border-orange-400 hover:bg-orange-50 focus-visible:ring-3 focus-visible:ring-orange-600/45"
     >
-      <span className="flex size-11 origin-center items-center justify-center rounded-full bg-orange-600 text-white transition-transform duration-200 ease-out group-hover/card:rotate-90 group-hover/card:scale-110 motion-reduce:transition-none motion-reduce:group-hover/card:rotate-0 motion-reduce:group-hover/card:scale-100">
+      <span className="flex size-11 origin-center items-center justify-center rounded-full bg-orange-600 text-white transition-transform duration-200 ease-out group-hover/card:scale-110 group-hover/card:rotate-90 motion-reduce:transition-none motion-reduce:group-hover/card:scale-100 motion-reduce:group-hover/card:rotate-0">
         <IconPlus aria-hidden="true" size={24} stroke={2} />
       </span>
       Crie uma avaliação
@@ -1595,9 +1765,7 @@ function PlanningMockCard({ planning }: { planning: PlanningMock }) {
         />
         <div className="absolute right-5 bottom-5 left-5 z-10 text-xs leading-5 text-foreground/60">
           <span className="block">{planning.createdAt}</span>
-          <span className="block">
-          {planning.updatedAt}
-          </span>
+          <span className="block">{planning.updatedAt}</span>
         </div>
       </div>
       <span className="mt-2 block text-sm font-medium tracking-tight text-foreground">

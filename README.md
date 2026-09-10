@@ -1,6 +1,6 @@
 # IARA
 
-Interface inicial da IARA, uma assistente para apoiar professores no planejamento, na criação de atividades e na exploração de habilidades da BNCC.
+Interface da IARA, uma assistente para apoiar professores no planejamento, na criação de avaliações, no acompanhamento de turmas e na exploração de habilidades da BNCC.
 
 O projeto usa Next.js 16, TypeScript, Tailwind CSS e shadcn/ui. A interface adota Reddit Sans e Reddit Mono, com ícones Solar e Tabler.
 
@@ -25,10 +25,10 @@ npm run build
 
 ## Estrutura principal
 
-- `app/inicio`: tela inicial, ações rápidas e área de modelos.
-- `components/creation-actions.tsx`: navegação entre Início e Modelos.
-- `components/model-explorer.tsx`: filtros, tópicos da BNCC e modelos de atividades.
-- `data/bncc-topics.json`: catálogo usado pelos filtros de Língua Portuguesa, Matemática e Produção textual.
+- `app/inicio`: tela inicial e ações rápidas.
+- `components/creation-actions.tsx`: ações rápidas, cards mockados e modais de criação.
+- `components/section-dashboard.tsx`: dashboards de turmas, avaliações, planejamentos e análises.
+- `data/bncc-topics.json`: catálogo usado pelos filtros de Língua Portuguesa para o 1º e o 2º ano.
 - `scripts/generate-bncc-topics.mjs`: gerador do catálogo a partir de uma exportação estruturada da BNCC.
 
 Para atualizar o catálogo, informe o arquivo-fonte e, opcionalmente, o arquivo de saída:
@@ -47,6 +47,6 @@ npx shadcn@latest add <componente>
 
 ## Publicação
 
-Repositório: [dgnprototype/Iara](https://github.com/dgnprototype/Iara).
+Repositório: [Ursulariel/IARA](https://github.com/Ursulariel/IARA).
 
 Na Vercel, use o framework Next.js, diretório raiz `./` e os comandos padrão. O projeto não exige variáveis de ambiente nesta fase.
