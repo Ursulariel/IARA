@@ -3,8 +3,8 @@
 import * as React from "react"
 import { Select as SelectPrimitive } from "@base-ui/react/select"
 import { cn } from "cn"
+import { AltArrowDownIcon } from "@solar-icons/react/outline/alt-arrow-down"
 import {
-  IconSelector,
   IconCheck,
   IconChevronUp,
   IconChevronDown,
@@ -53,7 +53,7 @@ function SelectTrigger({
       {children}
       <SelectPrimitive.Icon
         render={
-          <IconSelector className="pointer-events-none size-4 text-muted-foreground" />
+          <AltArrowDownIcon size={16} strokeWidth={1.5} className="pointer-events-none text-muted-foreground" />
         }
       />
     </SelectPrimitive.Trigger>

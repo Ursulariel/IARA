@@ -1,12 +1,27 @@
-import Link from "next/link"
-import { AltArrowRightIcon } from "@solar-icons/react/outline/alt-arrow-right"
+"use client"
 
+import { useMemo, useState } from "react"
+import Link from "next/link"
+import { CalendarIcon } from "@solar-icons/react/outline/calendar"
+import { MagnifierIcon } from "@solar-icons/react/outline/magnifier"
+import { BnccTopicPicker, type BnccTopic } from "@/components/bncc-topic-picker"
 import {
   AnalyticsIllustration,
   ClassroomIllustration,
   type PaletteName,
   TextDocumentIllustration,
 } from "@/components/document-card-illustrations"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
+import { Calendar } from "@/components/ui/calendar"
+import bnccCatalog from "@/data/bncc-topics.json"
 
 type DashboardSection = "turmas" | "avaliacoes" | "planejamentos" | "analises"
 
@@ -18,6 +33,17 @@ type DashboardCard = {
   type: "document" | "analysis" | "classroom"
   letter?: string
 }
+
+type FilterState = {
+  createdDate: string
+  schoolYear: string
+  classroomQuery: string
+  topic: string
+}
+
+const bnccTopics = (bnccCatalog.topics as BnccTopic[]).filter(
+  (topic) => topic.component === "Língua Portuguesa"
+)
 
 const dashboardContent: Record<
   DashboardSection,
@@ -116,6 +142,24 @@ const dashboardContent: Record<
 
 export function SectionDashboard({ section }: { section: DashboardSection }) {
   const content = dashboardContent[section]
+  const [filters, setFilters] = useState<FilterState>({
+    createdDate: "",
+    schoolYear: "all",
+    classroomQuery: "",
+    topic: "",
+  })
+  const filterableCards = useMemo(
+    () => content.cards.map((card, index) => ({ ...card, ...getCardMetadata(section, card, index) })),
+    [content.cards, section]
+  )
+  const visibleCards = filterableCards.filter((card) => {
+    return (
+      (!filters.createdDate || card.createdDate === filters.createdDate) &&
+      (filters.schoolYear === "all" || card.schoolYear === filters.schoolYear) &&
+      (!filters.classroomQuery || `${card.schoolYear} ${card.classroom}`.toLocaleLowerCase("pt-BR").includes(filters.classroomQuery.toLocaleLowerCase("pt-BR"))) &&
+      (!filters.topic || card.topic === filters.topic)
+    )
+  })
 
   return (
     <main className="relative min-h-full overflow-hidden px-6 py-5 sm:py-7 lg:py-9">
@@ -170,23 +214,212 @@ export function SectionDashboard({ section }: { section: DashboardSection }) {
             <h2 id={`${section}-recentes`} className="font-heading text-2xl font-semibold tracking-tight text-foreground">
               {content.cardsTitle}
             </h2>
-            <Link
-              href="/inicio"
-              className="group inline-flex items-center gap-1.5 text-sm font-semibold text-orange-700 transition-colors hover:text-orange-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
-            >
-              Ver no início
-              <AltArrowRightIcon size={16} strokeWidth={1.5} className="transition-transform group-hover:translate-x-0.5" />
-            </Link>
+            <DashboardFilters
+              section={section}
+              cards={filterableCards}
+              filters={filters}
+              onFiltersChange={setFilters}
+            />
           </div>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {content.cards.map((card) => (
+            {visibleCards.map((card) => (
               <DashboardCard key={card.title} card={card} />
             ))}
           </div>
+          {visibleCards.length === 0 && (
+            <p className="py-8 text-center text-sm text-muted-foreground">
+              Nenhum item encontrado para os filtros selecionados.
+            </p>
+          )}
         </section>
       </div>
     </main>
   )
+}
+
+type FilterableDashboardCard = DashboardCard & {
+  createdDate: string
+  schoolYear: string
+  classroom: string
+  topic?: string
+}
+
+function DashboardFilters({
+  section,
+  cards,
+  filters,
+  onFiltersChange,
+}: {
+  section: DashboardSection
+  cards: FilterableDashboardCard[]
+  filters: FilterState
+  onFiltersChange: (filters: FilterState) => void
+}) {
+  const schoolYears = [...new Set(cards.map((card) => card.schoolYear))]
+  const supportsTopic = section === "avaliacoes" || section === "planejamentos"
+  const selectedYear = filters.schoolYear === "all" ? null : Number(filters.schoolYear[0])
+  const topics = selectedYear
+    ? bnccTopics.filter((topic) => topic.years.includes(selectedYear))
+    : bnccTopics
+
+  function setFilter(key: keyof FilterState, value: string | null) {
+    if (value) onFiltersChange({ ...filters, [key]: value })
+  }
+
+  return (
+    <div className="flex flex-wrap items-center justify-end gap-2">
+      <div className="relative">
+        <MagnifierIcon size={17} strokeWidth={1.5} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          value={filters.classroomQuery}
+          onChange={(event) => onFiltersChange({ ...filters, classroomQuery: event.target.value })}
+          aria-label="Buscar por nome da turma"
+          placeholder="Nome da turma"
+          className="h-10 w-40 rounded-full bg-white pr-4 pl-9 text-sm shadow-none focus-visible:border-orange-500 focus-visible:ring-orange-500/35"
+        />
+      </div>
+      <DashboardDatePicker
+        value={filters.createdDate}
+        onValueChange={(createdDate) => onFiltersChange({ ...filters, createdDate })}
+      />
+      <DashboardFilterSelect
+        label="Ano escolar"
+        value={filters.schoolYear}
+        options={[
+          { value: "all", label: "Ano escolar" },
+          ...schoolYears.map((year) => ({ value: year, label: year })),
+        ]}
+        onValueChange={(value) => setFilter("schoolYear", value)}
+      />
+      {supportsTopic && (
+        <BnccTopicPicker
+          id={`dashboard-${section}-topic-picker`}
+          topics={topics}
+          selectedCode={filters.topic}
+          onSelect={(topic) => onFiltersChange({ ...filters, topic })}
+          placeholder="Tópico da BNCC"
+          triggerClassName="!h-10 !w-auto min-w-40 !rounded-full px-3 hover:border-blue-500 hover:bg-blue-50"
+        />
+      )}
+    </div>
+  )
+}
+
+function DashboardFilterSelect({
+  label,
+  value,
+  options,
+  onValueChange,
+}: {
+  label: string
+  value: string
+  options: Array<{ value: string; label: string }>
+  onValueChange: (value: string | null) => void
+}) {
+  return (
+    <Select value={value} onValueChange={onValueChange} items={options}>
+      <SelectTrigger aria-label={label} className="h-10 min-w-34 cursor-pointer rounded-full bg-white px-3 text-sm font-normal shadow-none data-[size=default]:!h-10 focus-visible:border-orange-500 focus-visible:ring-orange-500/35">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent align="end" positionerClassName="z-[70]">
+        <SelectGroup>
+          {options.map((option) => (
+            <SelectItem key={option.value} value={option.value} className="cursor-pointer">
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  )
+}
+
+function DashboardDatePicker({
+  value,
+  onValueChange,
+}: {
+  value: string
+  onValueChange: (value: string) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const selected = value ? new Date(`${value}T12:00:00`) : undefined
+  const label = selected
+    ? selected.toLocaleDateString("pt-BR", { dateStyle: "medium" })
+    : "Data de criação"
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        aria-label="Data de criação"
+        aria-expanded={open}
+        onClick={() => setOpen((current) => !current)}
+        className="flex h-10 cursor-pointer items-center gap-2 rounded-full border border-input bg-white px-3 text-left text-sm font-normal text-foreground outline-none transition-colors hover:bg-orange-50 focus-visible:ring-3 focus-visible:ring-orange-500/35"
+      >
+        <CalendarIcon size={17} strokeWidth={1.5} className="text-muted-foreground" />
+        {label}
+      </button>
+      {open && (
+        <div className="absolute top-[calc(100%+0.4rem)] left-0 z-[80] rounded-xl bg-white shadow-xl ring-1 ring-foreground/10">
+          <Calendar
+            selected={selected}
+            onSelect={(date) => {
+              const isoDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
+              onValueChange(isoDate)
+              setOpen(false)
+            }}
+          />
+          {value && (
+            <button
+              type="button"
+              onClick={() => {
+                onValueChange("")
+                setOpen(false)
+              }}
+              className="mx-3 mb-3 h-8 w-[calc(100%-1.5rem)] cursor-pointer rounded-lg text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              Limpar data
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function getCardMetadata(
+  section: DashboardSection,
+  card: DashboardCard,
+  index: number
+): Omit<FilterableDashboardCard, keyof DashboardCard> {
+  const schoolMatch = `${card.title} ${card.detail}`.match(/([12])º ano ([A-Z])/)
+  const topic = getBnccTopic(section, card.title)
+
+  return {
+    createdDate: ["2026-09-10", "2026-09-07", "2026-09-02", "2026-08-23"][index] ?? "2026-08-10",
+    schoolYear: schoolMatch ? `${schoolMatch[1]}º ano` : "",
+    classroom: schoolMatch?.[2] ?? "",
+    topic,
+  }
+}
+
+function getBnccTopic(section: DashboardSection, title: string) {
+  const topics: Partial<Record<DashboardSection, Record<string, string>>> = {
+    avaliacoes: {
+      "Avaliação diagnóstica de leitura": "EF01LP01",
+      "Compreensão de textos curtos": "EF02LP12",
+      "Leitura de palavras e sílabas": "EF01LP06",
+      "Convenções da escrita": "EF02LP01",
+    },
+    planejamentos: {
+      "Leitura compartilhada: fábulas": "EF01LP16",
+      "Rimas e aliterações": "EF02LP06",
+      "Sequência de leitura: parlendas": "EF01LP19",
+      "Roda de conversa literária": "EF02LP26",
+    },
+  }
+
+  return topics[section]?.[title]
 }
 
 function DashboardCard({ card }: { card: DashboardCard }) {
